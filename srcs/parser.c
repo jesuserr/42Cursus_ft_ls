@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 12:03:16 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:45:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 // First of all verifies is '--help' is present along all arguments to not
 // allocate anything and just print the help message and exit.
+// All arguments that are not options (starting with '-') are added to linked
+// list of files/directories to 'ls' and then list is sorted alphabetically.
 void	parse_arguments(char **argv, t_ls_data *ls_data)
 {
 	t_args	*args;

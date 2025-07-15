@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:22:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 00:02:33 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:40:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ static t_list	*merge_lists(t_list *a, t_list *b)
 	return (dummy.next);
 }
 
+// Sorts a linked list using the merge sort algorithm.
+// https://www.youtube.com/watch?v=TGveA1oFhrc
+// If the list is empty or has only one element, it returns since it is sorted.
+// The sort_list() function takes a double pointer (t_list **list) instead of a
+// single pointer (t_list *list) because it needs to modify the original pointer
+// that points to the head of the list.
 void	sort_list(t_list **list)
 {
 	t_list	*head;
