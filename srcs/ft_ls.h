@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/10 22:34:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:57:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_args
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
 	bool		sort_by_time;		// option -t
+	t_list		*cli_files_list;	// linked list of files/directories to 'ls'
 }	t_args;
 
 typedef struct s_ls_data
@@ -57,7 +58,8 @@ typedef struct s_ls_data
 
 /********************************** main.c ************************************/
 void	free_allocated_memory(t_ls_data *ls_data);
-/********************************** parser_utils.c ****************************/
+/********************************** merge_sort.c ******************************/
+void	sort_list(t_list **list);
 
 /********************************** parser.c **********************************/
 void	parse_arguments(char **argv, t_ls_data *ls_data);
