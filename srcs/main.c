@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 12:04:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:56:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@ int	main(int argc, char **argv)
 	(void)argc;
 	ft_bzero(&ls_data, sizeof(t_ls_data));
 	parse_arguments(argv, &ls_data);
-	
-	ft_hex_dump(&ls_data.args, sizeof(t_args), 16);
 	print_list(ls_data.args.cli_files_list);
-	ft_printf("List size: %d\n", ft_lstsize(ls_data.args.cli_files_list));
-	
 	free_allocated_memory(&ls_data);
 	return (EXIT_SUCCESS);
 }

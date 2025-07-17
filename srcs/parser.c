@@ -6,27 +6,31 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 12:45:11 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/17 13:16:53 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-// First of all verifies is '--help' is present along all arguments to not
+// First of all verifies if '--help' is present along all arguments to not
 // allocate anything and just print the help message and exit.
-// All arguments that are not options (starting with '-') are added to linked
-// list of files/directories to 'ls' and then list is sorted alphabetically.
+// All arguments that are not options (starting with '-') and exist as file or
+// directory are added to linked list of files/directories to 'ls' and then the
+// list is sorted alphabetically.
 void	parse_arguments(char **argv, t_ls_data *ls_data)
 {
-	t_args	*args;
+	t_args		*args;
+	struct stat	test_file_exist;
+	bool		no_such_file;
 
+	no_such_file = false;
 	args = &ls_data->args;
 	for (uint8_t i = 1; argv[i]; i++)
 		if (!ft_strncmp(argv[i], "--help", 6) && ft_strlen(argv[i]) == 6)
 			print_usage();
 	for (uint8_t i = 1; argv[i]; i++)
 	{
-		if (argv[i][0] == '-' && argv[i][1] != '\0' && ft_strlen(argv[i]) < CHAR_MAX)
+		if (argv[i][0] == '-' && argv[i][1] != '\0')
 		{
 			for (uint8_t j = 1; argv[i][j]; j++)
 			{
@@ -45,8 +49,21 @@ void	parse_arguments(char **argv, t_ls_data *ls_data)
 			}
 		}
 		else
-			ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(argv[i])));
+		{
+			if (stat(argv[i], &test_file_exist) == 0)
+				ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(argv[i])));
+			else
+			{
+				ft_printf("ft_ls: cannot access '%s': ", argv[i]);
+				perror("");
+				no_such_file = true;
+			}
+		}
 	}
 	if (args->cli_files_list)
 		sort_list(&args->cli_files_list);
+	else if (!no_such_file)
+		ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(".")));
+	//ft_hex_dump(args, sizeof(t_args), 8);
+	//ft_printf("List size: %d\n", ft_lstsize(args->cli_files_list));
 }
