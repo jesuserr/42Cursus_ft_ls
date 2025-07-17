@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 11:57:11 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/17 23:49:36 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ typedef struct s_args
 	t_list		*cli_files_list;	// linked list of files/directories to 'ls'
 }	t_args;
 
+typedef struct s_entry_data
+{
+	struct dirent	entry;			// dirent struct to hold file name and type
+	struct stat		stat_buf;		// stat struct to hold file metadata
+}	t_entry_data;
+
 typedef struct s_ls_data
 {
 	t_args		args;
@@ -54,10 +60,9 @@ typedef struct s_ls_data
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
-/********************************** bonus.c ***********************************/
-
 /********************************** main.c ************************************/
 void	free_allocated_memory(t_ls_data *ls_data);
+
 /********************************** merge_sort.c ******************************/
 void	sort_list(t_list **list);
 
@@ -65,8 +70,13 @@ void	sort_list(t_list **list);
 void	parse_arguments(char **argv, t_ls_data *ls_data);
 
 /********************************** print_errors.c ****************************/
-void	print_invalid_option_and_exit(char option, t_ls_data *ls_data);
-void	print_perror_and_exit(char *msg, t_ls_data *ls_data);
+void	print_invalid_option_and_exit(const char option, t_ls_data *ls_data);
+void	print_perror_and_exit(const char *msg, t_ls_data *ls_data);
 void	print_usage(void);
+
+/********************************** utils.c ***********************************/
+char	*build_full_path(const char *current_path, const struct dirent *entry);
+void	copy_dirent_struct(struct dirent *dest, const struct dirent *src);
+void	print_list(t_list *list);
 
 #endif

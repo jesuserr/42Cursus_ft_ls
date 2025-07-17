@@ -6,13 +6,13 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:49 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 12:13:40 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/17 23:44:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	print_invalid_option_and_exit(char option, t_ls_data *ls_data)
+void	print_invalid_option_and_exit(const char option, t_ls_data *ls_data)
 {
 	ft_putstr_fd("ft_ls: invalid option -- '", STDERR_FILENO);
 	ft_putchar_fd(option, STDERR_FILENO);
@@ -22,7 +22,7 @@ void	print_invalid_option_and_exit(char option, t_ls_data *ls_data)
 	exit (EXIT_FAILURE);
 }
 
-void	print_perror_and_exit(char *msg, t_ls_data *ls_data)
+void	print_perror_and_exit(const char *msg, t_ls_data *ls_data)
 {
 	perror(msg);
 	free_allocated_memory(ls_data);
