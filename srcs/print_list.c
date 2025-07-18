@@ -6,14 +6,14 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 21:24:46 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 23:49:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 // Auxiliar function for debugging purposes. Delete at the end of the project.
-void	print_list(t_list *list)
+void	print_list_aux(t_list *list)
 {
 	while (list)
 	{
@@ -22,11 +22,14 @@ void	print_list(t_list *list)
 	}
 }
 
-void	print_listing(t_args *args, t_list *entries_list, const char *current_path)
+void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 {
 	t_entry_data	*entry_data;
 
-	ft_printf("%s:\n", current_path);
+	if (ft_strchr(current_path, ' ') != NULL)
+		ft_printf("'%s':\n", current_path);
+	else
+		ft_printf("%s:\n", current_path);
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
@@ -35,7 +38,10 @@ void	print_listing(t_args *args, t_list *entries_list, const char *current_path)
 			entries_list = entries_list->next;
 			continue ;
 		}
-		ft_printf("%s  ", entry_data->entry.d_name);
+		if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)
+			ft_printf("'%s'  ", entry_data->entry.d_name);
+		else
+			ft_printf("%s  ", entry_data->entry.d_name);
 		entries_list = entries_list->next;
 	}
 	ft_printf("\n\n");

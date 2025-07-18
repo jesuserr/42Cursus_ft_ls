@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 22:26:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 23:43:41 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	list_files(t_args *args, const char *current_path)
 		sort_list(&entries_list, compare_stat_times, args->reverse);
 	else
 		sort_list(&entries_list, compare_d_names, args->reverse);
-	print_listing(args, entries_list, current_path);
+	print_list(args, entries_list, current_path);
 	closedir(directory);
 	ft_lstclear(&entries_list, free);
 }

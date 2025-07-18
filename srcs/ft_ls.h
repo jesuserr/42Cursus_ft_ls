@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 22:27:29 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 23:44:20 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	print_perror_and_exit(const char *msg, t_args *args);
 void	print_usage(void);
 
 /********************************** print_list.c ******************************/
-void	print_list(t_list *list);
-void	print_listing(t_args *args, t_list *entries_list, const char *path);
+void	print_list_aux(t_list *list);
+void	print_list(t_args *args, t_list *entries_list, const char *curr_path);
 
 #endif
