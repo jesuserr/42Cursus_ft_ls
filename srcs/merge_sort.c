@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:22:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 17:00:43 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 20:33:06 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,48 @@ int	compare_d_names(const void *a, const void *b, bool reverse)
 		return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name));
 	else
 		return (ft_strcmp(entry_a->entry.d_name, entry_b->entry.d_name));
+}
+
+// Comparison function to sort the list of directory entries by their st_mtime.
+// Time of last modification is used to sort the entries.
+// First approach was to subtract the two times and return the result, but
+// that approach was not safe because the result could overflow if difference
+// between both time was bigger than an int.
+// When last modification times are the same (same second), the comparison is
+// done by comparing the nanoseconds (st_mtim.tv_nsec) to ensure a stable sort.
+// As last resort, if both times and nanoseconds are the same, the names
+// are compared to ensure a stable sort.
+int	compare_stat_times(const void *a, const void *b, bool reverse)
+{
+	t_entry_data	*entry_a;
+	t_entry_data	*entry_b;
+
+	entry_a = (t_entry_data *)a;
+	entry_b = (t_entry_data *)b;
+	if (reverse)
+	{
+		if (entry_a->stat_buf.st_mtime > entry_b->stat_buf.st_mtime)
+			return (1);
+		if (entry_a->stat_buf.st_mtime < entry_b->stat_buf.st_mtime)
+			return (-1);
+		if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
+			return (1);
+		if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
+			return (-1);
+		return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name));
+	}
+	else
+	{
+		if (entry_a->stat_buf.st_mtime > entry_b->stat_buf.st_mtime)
+			return (-1);
+		if (entry_a->stat_buf.st_mtime < entry_b->stat_buf.st_mtime)
+			return (1);
+		if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
+			return (-1);
+		if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
+			return (1);
+		return (ft_strcmp(entry_a->entry.d_name, entry_b->entry.d_name));
+	}
 }
 
 // Uses the fast and slow pointer technique to split the list into two halves.
