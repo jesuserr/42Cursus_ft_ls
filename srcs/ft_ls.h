@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 00:12:16 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:42:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              DEFINES
 */
+// Function pointer type for comparison functions. Creates a type called
+// t_compare_func that points to a function that takes two const void pointers
+// and boolean reverse as arguments and returns an int.
+// typedef for function pointers is a best practice that makes code more
+// readable, reusable, maintainable, and less error-prone.
+typedef int	(*t_compare_func)(const void *a, const void *b, bool reverse);
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -59,7 +65,8 @@ typedef struct s_entry_data
 void	free_allocated_memory(t_args *args);
 
 /********************************** merge_sort.c ******************************/
-void	sort_list(t_list **list);
+void	sort_list(t_list **list, t_compare_func compare, bool reverse);
+int		compare_names_cli(const void *a, const void *b, bool reverse);
 
 /********************************** parser.c **********************************/
 void	parse_arguments(char **argv, t_args *args);

@@ -6,11 +6,22 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:22:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/15 12:40:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:33:48 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+// Comparison function to sort the list of command line arguments by their name.
+// List is contained in args->cli_files_list. In that case *content of the list
+// nodes is just a string (file/directory name).
+int	compare_names_cli(const void *a, const void *b, bool reverse)
+{
+	if (reverse)
+		return (ft_strcmp((char *)b, (char *)a));
+	else
+		return (ft_strcmp((char *)a, (char *)b));
+}
 
 // Uses the fast and slow pointer technique to split the list into two halves.
 // First of all checks again if the list is empty or has only one element (it
@@ -39,15 +50,14 @@ static void	split_list(t_list *head, t_list **middle)
 	slow->next = NULL;
 }
 
-// TODO: Pass comparison function as a parameter to allow for different sorting
-// criteria. Right now it only sorts by string comparison of the content of the
-// list nodes.
+// Comparison function 'compare' is passed as a parameter to allow for different
+// sorting criteria (name, time, etc.).
 // Function could be recursive but it is implemented as iterative to avoid
 // potential stack overflow for very large lists ('ls' from root directory).
 // Uses dummy node technique which is a common pattern in linked list
 // manipulation to simplify code by eliminating special cases for the head node.
 // Tail is used to keep track of the last node in the merged list.
-static t_list	*merge_lists(t_list *a, t_list *b)
+static t_list	*merge_lists(t_list *a, t_list *b, t_compare_func compare, bool reverse)
 {
 	t_list	dummy;
 	t_list	*tail;
@@ -60,7 +70,7 @@ static t_list	*merge_lists(t_list *a, t_list *b)
 	tail = &dummy;
 	while (a && b)
 	{
-		if (ft_strcmp((char *)a->content, (char *)b->content) <= 0)
+		if (compare(a->content, b->content, reverse) <= 0)
 		{
 			tail->next = a;
 			a = a->next;
@@ -84,8 +94,9 @@ static t_list	*merge_lists(t_list *a, t_list *b)
 // If the list is empty or has only one element, it returns since it is sorted.
 // The sort_list() function takes a double pointer (t_list **list) instead of a
 // single pointer (t_list *list) because it needs to modify the original pointer
-// that points to the head of the list.
-void	sort_list(t_list **list)
+// that points to the head of the list. Also takes as a parameter a function
+// pointer 'compare' to allow for different sorting criteria (name, time, etc.)
+void	sort_list(t_list **list, t_compare_func compare, bool reverse)
 {
 	t_list	*head;
 	t_list	*middle;
@@ -94,7 +105,7 @@ void	sort_list(t_list **list)
 		return ;
 	head = *list;
 	split_list(head, &middle);
-	sort_list(&head);
-	sort_list(&middle);
-	*list = merge_lists(head, middle);
+	sort_list(&head, compare, reverse);
+	sort_list(&middle, compare, reverse);
+	*list = merge_lists(head, middle, compare, reverse);
 }

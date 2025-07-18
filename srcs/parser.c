@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 00:33:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 14:08:33 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	parse_arguments(char **argv, t_args *args)
 	struct stat	test_file_exist;
 	bool		no_such_file;
 
-	no_such_file = false;	
+	no_such_file = false;
 	for (uint8_t i = 1; argv[i]; i++)
 		if (!ft_strncmp(argv[i], "--help", 6) && ft_strlen(argv[i]) == 6)
 			print_usage();
@@ -61,9 +61,7 @@ void	parse_arguments(char **argv, t_args *args)
 		}
 	}
 	if (args->cli_files_list)
-		sort_list(&args->cli_files_list);
+		sort_list(&args->cli_files_list, compare_names_cli, args->reverse);
 	else if (!no_such_file)
 		ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(".")));
-	//ft_hex_dump(args, sizeof(t_args), 8);
-	//ft_printf("List size: %d\n", ft_lstsize(args->cli_files_list));
 }
