@@ -6,26 +6,26 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:49 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/17 23:44:11 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 00:13:14 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	print_invalid_option_and_exit(const char option, t_ls_data *ls_data)
+void	print_invalid_option_and_exit(const char option, t_args *args)
 {
 	ft_putstr_fd("ft_ls: invalid option -- '", STDERR_FILENO);
 	ft_putchar_fd(option, STDERR_FILENO);
 	ft_putstr_fd("'\n", STDERR_FILENO);
 	ft_putstr_fd("Try 'ft_ls --help' for more information.\n", STDERR_FILENO);
-	free_allocated_memory(ls_data);
+	free_allocated_memory(args);
 	exit (EXIT_FAILURE);
 }
 
-void	print_perror_and_exit(const char *msg, t_ls_data *ls_data)
+void	print_perror_and_exit(const char *msg, t_args *args)
 {
 	perror(msg);
-	free_allocated_memory(ls_data);
+	free_allocated_memory(args);
 	exit(EXIT_FAILURE);
 }
 

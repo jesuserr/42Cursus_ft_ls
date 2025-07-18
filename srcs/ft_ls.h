@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/17 23:49:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 00:12:16 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,27 +51,22 @@ typedef struct s_entry_data
 	struct stat		stat_buf;		// stat struct to hold file metadata
 }	t_entry_data;
 
-typedef struct s_ls_data
-{
-	t_args		args;
-}	t_ls_data;
-
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
 /********************************** main.c ************************************/
-void	free_allocated_memory(t_ls_data *ls_data);
+void	free_allocated_memory(t_args *args);
 
 /********************************** merge_sort.c ******************************/
 void	sort_list(t_list **list);
 
 /********************************** parser.c **********************************/
-void	parse_arguments(char **argv, t_ls_data *ls_data);
+void	parse_arguments(char **argv, t_args *args);
 
 /********************************** print_errors.c ****************************/
-void	print_invalid_option_and_exit(const char option, t_ls_data *ls_data);
-void	print_perror_and_exit(const char *msg, t_ls_data *ls_data);
+void	print_invalid_option_and_exit(const char option, t_args *args);
+void	print_perror_and_exit(const char *msg, t_args *args);
 void	print_usage(void);
 
 /********************************** utils.c ***********************************/
