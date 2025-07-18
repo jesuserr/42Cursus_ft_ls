@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:22:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 20:33:06 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 21:09:46 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,33 +50,22 @@ int	compare_stat_times(const void *a, const void *b, bool reverse)
 {
 	t_entry_data	*entry_a;
 	t_entry_data	*entry_b;
+	int8_t			result;
 
 	entry_a = (t_entry_data *)a;
 	entry_b = (t_entry_data *)b;
+	result = -1;
 	if (reverse)
-	{
-		if (entry_a->stat_buf.st_mtime > entry_b->stat_buf.st_mtime)
-			return (1);
-		if (entry_a->stat_buf.st_mtime < entry_b->stat_buf.st_mtime)
-			return (-1);
-		if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
-			return (1);
-		if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
-			return (-1);
-		return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name));
-	}
-	else
-	{
-		if (entry_a->stat_buf.st_mtime > entry_b->stat_buf.st_mtime)
-			return (-1);
-		if (entry_a->stat_buf.st_mtime < entry_b->stat_buf.st_mtime)
-			return (1);
-		if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
-			return (-1);
-		if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
-			return (1);
-		return (ft_strcmp(entry_a->entry.d_name, entry_b->entry.d_name));
-	}
+		result = 1;
+	if (entry_a->stat_buf.st_mtime > entry_b->stat_buf.st_mtime)
+		return (1 * result);
+	if (entry_a->stat_buf.st_mtime < entry_b->stat_buf.st_mtime)
+		return (-1 * result);
+	if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
+		return (1 * result);
+	if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
+		return (-1 * result);
+	return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name));
 }
 
 // Uses the fast and slow pointer technique to split the list into two halves.
