@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 17:04:54 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/18 22:27:29 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,19 @@ typedef struct s_entry_data
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
+/********************************** list_files.c ******************************/
+void	list_files(t_args *args, const char *current_path);
+
 /********************************** main.c ************************************/
 void	free_allocated_memory(t_args *args);
 
-/********************************** merge_sort.c ******************************/
-void	sort_list(t_list **list, t_compare_func compare, bool reverse);
+/********************************** merge_sort_comp.c *************************/
 int		compare_names_cli(const void *a, const void *b, bool reverse);
 int		compare_d_names(const void *a, const void *b, bool reverse);
 int		compare_stat_times(const void *a, const void *b, bool reverse);
+
+/********************************** merge_sort.c ******************************/
+void	sort_list(t_list **list, t_compare_func compare, bool reverse);
 
 /********************************** parser.c **********************************/
 void	parse_arguments(char **argv, t_args *args);
@@ -78,9 +83,8 @@ void	print_invalid_option_and_exit(const char option, t_args *args);
 void	print_perror_and_exit(const char *msg, t_args *args);
 void	print_usage(void);
 
-/********************************** utils.c ***********************************/
-char	*build_full_path(const char *current_path, const struct dirent *entry);
-void	copy_dirent_struct(struct dirent *dest, const struct dirent *src);
+/********************************** print_list.c ******************************/
 void	print_list(t_list *list);
+void	print_listing(t_args *args, t_list *entries_list, const char *path);
 
 #endif

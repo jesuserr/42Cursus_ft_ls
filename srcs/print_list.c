@@ -1,0 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_list.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
+/*   Updated: 2025/07/18 21:24:46 by jesuserr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_ls.h"
+
+// Auxiliar function for debugging purposes. Delete at the end of the project.
+void	print_list(t_list *list)
+{
+	while (list)
+	{
+		ft_printf("Content: %s\n", (char *)list->content);
+		list = list->next;
+	}
+}
+
+void	print_listing(t_args *args, t_list *entries_list, const char *current_path)
+{
+	t_entry_data	*entry_data;
+
+	ft_printf("%s:\n", current_path);
+	while (entries_list)
+	{
+		entry_data = (t_entry_data *)entries_list->content;
+		if (entry_data->entry.d_name[0] == '.' && !args->all)
+		{
+			entries_list = entries_list->next;
+			continue ;
+		}
+		ft_printf("%s  ", entry_data->entry.d_name);
+		entries_list = entries_list->next;
+	}
+	ft_printf("\n\n");
+}

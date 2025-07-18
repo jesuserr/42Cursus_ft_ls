@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   list_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/17 23:03:03 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/17 23:42:14 by jesuserr         ###   ########.fr       */
+/*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
+/*   Updated: 2025/07/18 22:26:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // calls to list_files. It allocates enough memory for the full path, including
 // the null terminator. It also ensures that there is a '/' between the current
 // path and the entry name, unless the current path ends with '/'.
-char	*build_full_path(const char *current_path, const struct dirent *entry)
+static char	*build_full_path(const char *current_path, const struct dirent *entry)
 {
 	char		*full_path;
 	uint64_t	path_len;
@@ -39,7 +39,7 @@ char	*build_full_path(const char *current_path, const struct dirent *entry)
 // memory for that specific entry, causing invalid reads.
 // Doing ft_memcpy(&new_entry_data->entry, entry, sizeof(struct dirent)) was
 // making valgrind complains.
-void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
+static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 {
 	dest->d_ino = src->d_ino;
 	dest->d_off = src->d_off;
@@ -48,12 +48,43 @@ void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 	ft_strlcpy(dest->d_name, src->d_name, sizeof(dest->d_name));
 }
 
-// Auxiliar function for debugging purposes. Delete at the end of the project.
-void	print_list(t_list *list)
+// exiting if closedir fails is an issue if the function is recursive since
+// the function should return -1 if it fails, not exit the program.
+void	list_files(t_args *args, const char *current_path)
 {
-	while (list)
+	DIR				*directory;
+	struct dirent	*entry;
+	t_list			*entries_list;
+	t_entry_data	*new_entry_data;
+	char			*full_path;
+
+	entries_list = NULL;
+	directory = opendir(current_path);
+	if (directory == NULL)
 	{
-		ft_printf("Content: %s\n", (char *)list->content);
-		list = list->next;
+		ft_printf("ft_ls: cannot open directory '%s': ", current_path);
+		perror("");
+		return ;
 	}
+	entry = readdir(directory);
+	while (entry)
+	{
+		new_entry_data = malloc(sizeof(t_entry_data));
+		full_path = build_full_path(current_path, entry);
+		lstat(full_path, &new_entry_data->stat_buf);
+		copy_dirent_struct(&new_entry_data->entry, entry);
+		ft_lstadd_back(&entries_list, ft_lstnew(new_entry_data));
+		if (entry->d_type == DT_DIR && ft_strcmp(entry->d_name, ".") != 0 && \
+		ft_strcmp(entry->d_name, "..") != 0 && args->recursive)
+			list_files(args, full_path);
+		free(full_path);
+		entry = readdir(directory);
+	}
+	if (args->sort_by_time)
+		sort_list(&entries_list, compare_stat_times, args->reverse);
+	else
+		sort_list(&entries_list, compare_d_names, args->reverse);
+	print_listing(args, entries_list, current_path);
+	closedir(directory);
+	ft_lstclear(&entries_list, free);
 }
