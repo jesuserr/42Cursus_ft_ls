@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/19 10:29:05 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/19 22:38:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*build_full_path(const char *current_path, const struct dirent *entr
 // filename length. Using sizeof(struct dirent) copies beyond the allocated
 // memory for that specific entry, causing invalid reads.
 // Doing ft_memcpy(&new_entry_data->entry, entry, sizeof(struct dirent)) was
-// making valgrind complains.
+// making valgrind complain.
 static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 {
 	dest->d_ino = src->d_ino;
@@ -46,6 +46,32 @@ static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 	dest->d_reclen = src->d_reclen;
 	dest->d_type = src->d_type;
 	ft_strlcpy(dest->d_name, src->d_name, sizeof(dest->d_name));
+}
+
+// Processes subdirectories for recursive listing. Sorts the subdirectory list
+// by name or time, then recursively calls list_files() on each subdirectory
+// using their full paths. Properly manages memory by freeing paths and clearing
+// the subdirectories list after processing.
+static void	process_subdirs(t_args *args, t_list *subdirs_list, const char *current_path)
+{
+	t_list			*current_subdir;
+	char			*subdir_full_path;
+	struct dirent	*subdir_entry;
+
+	if (args->sort_by_time)
+		sort_list(&subdirs_list, compare_stat_times, args->reverse);
+	else
+		sort_list(&subdirs_list, compare_d_names, args->reverse);
+	current_subdir = subdirs_list;
+	while (current_subdir)
+	{
+		subdir_entry = &((t_entry_data *)current_subdir->content)->entry;
+		subdir_full_path = build_full_path(current_path, subdir_entry);
+		list_files(args, subdir_full_path);
+		free(subdir_full_path);
+		current_subdir = current_subdir->next;
+	}
+	ft_lstclear(&subdirs_list, free);
 }
 
 // Recursively lists files and directories in the specified path. Opens the
@@ -58,11 +84,12 @@ void	list_files(t_args *args, const char *current_path)
 {
 	DIR				*directory;
 	struct dirent	*entry;
-	t_list			*entries_list;
-	t_entry_data	*new_entry_data;
+	t_list			*entries_list, *subdirs_list;
+	t_entry_data	*new_entry_data, *new_subdir_data;
 	char			*full_path;
 
 	entries_list = NULL;
+	subdirs_list = NULL;
 	directory = opendir(current_path);
 	if (directory == NULL)
 	{
@@ -80,7 +107,11 @@ void	list_files(t_args *args, const char *current_path)
 		ft_lstadd_back(&entries_list, ft_lstnew(new_entry_data));
 		if (entry->d_type == DT_DIR && ft_strcmp(entry->d_name, ".") != 0 && \
 		ft_strcmp(entry->d_name, "..") != 0 && args->recursive)
-			list_files(args, full_path);
+		{
+			new_subdir_data = malloc(sizeof(t_entry_data));
+			ft_memcpy(new_subdir_data, new_entry_data, sizeof(t_entry_data));
+			ft_lstadd_back(&subdirs_list, ft_lstnew(new_subdir_data));
+		}
 		free(full_path);
 		entry = readdir(directory);
 	}
@@ -89,6 +120,8 @@ void	list_files(t_args *args, const char *current_path)
 	else
 		sort_list(&entries_list, compare_d_names, args->reverse);
 	print_list(args, entries_list, current_path);
+	if (subdirs_list)
+		process_subdirs(args, subdirs_list, current_path);
 	closedir(directory);
 	ft_lstclear(&entries_list, free);
 }
