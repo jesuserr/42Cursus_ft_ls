@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 14:08:33 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/19 10:41:18 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,5 @@ void	parse_arguments(char **argv, t_args *args)
 		sort_list(&args->cli_files_list, compare_names_cli, args->reverse);
 	else if (!no_such_file)
 		ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(".")));
+	args->first_printing = true;
 }

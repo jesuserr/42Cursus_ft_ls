@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 23:44:20 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/19 10:43:51 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_args
 	bool		recursive;			// option -R
 	bool		sort_by_time;		// option -t
 	t_list		*cli_files_list;	// linked list of files/directories to 'ls'
+	bool		first_printing;		// used to not print "\n" the first time
 }	t_args;
 
 typedef struct s_entry_data

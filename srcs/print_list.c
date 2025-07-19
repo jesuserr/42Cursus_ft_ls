@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 23:49:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/19 10:40:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 {
 	t_entry_data	*entry_data;
 
+	if (!args->first_printing)
+		ft_printf("\n");
+	else
+		args->first_printing = false;
 	if (ft_strchr(current_path, ' ') != NULL)
 		ft_printf("'%s':\n", current_path);
 	else
@@ -44,5 +48,5 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 			ft_printf("%s  ", entry_data->entry.d_name);
 		entries_list = entries_list->next;
 	}
-	ft_printf("\n\n");
+	ft_printf("\n");
 }

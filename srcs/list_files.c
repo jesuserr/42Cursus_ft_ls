@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 23:43:41 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/19 10:29:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 	ft_strlcpy(dest->d_name, src->d_name, sizeof(dest->d_name));
 }
 
-// exiting if closedir fails is an issue if the function is recursive since
-// the function should return -1 if it fails, not exit the program.
+// Recursively lists files and directories in the specified path. Opens the
+// directory, reads each entry, and stores them in a linked list along with
+// their stat information. Entries are sorted by name or modification time based
+// on arguments. After printing the current directory contents, it processes
+// subdirectories recursively if the recursive flag is set. Memory is properly
+// cleaned up after processing.
 void	list_files(t_args *args, const char *current_path)
 {
 	DIR				*directory;
