@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 13:17:27 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 21:33:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // continues, setting no_such_file flag to indicate failure. lstat() is used to
 // check if the file exists as the actual ls command does, which means it will
 // show broken symlinks in the listing.
-void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
+static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 {
 	struct stat	file_exists;
 
@@ -35,6 +35,18 @@ void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 		perror("");
 		*no_such_file = true;
 	}
+}
+
+static void	sort_lists(t_args *args)
+{
+	if (args->cli_files_list && args->sort_by_time)
+		sort_list(&args->cli_files_list, compare_times_cli, args->reverse);
+	else if (args->cli_files_list)
+		sort_list(&args->cli_files_list, compare_names_cli, args->reverse);
+	if (args->cli_dirs_list && args->sort_by_time)
+		sort_list(&args->cli_dirs_list, compare_times_cli, args->reverse);
+	else if (args->cli_dirs_list)
+		sort_list(&args->cli_dirs_list, compare_names_cli, args->reverse);
 }
 
 // First of all verifies if '--help' is present along all arguments to not
@@ -73,18 +85,9 @@ void	parse_arguments(char **argv, t_args *args)
 		else
 			add_entity_to_list(argv[i], args, &no_such_file);
 	}
-	if (args->cli_files_list)
-		sort_list(&args->cli_files_list, compare_names_cli, args->reverse);
-	if (args->cli_dirs_list)
-		sort_list(&args->cli_dirs_list, compare_names_cli, args->reverse);
+	if (args->cli_dirs_list || args->cli_files_list)
+		sort_lists(args);
 	if (!no_such_file && !args->cli_dirs_list && !args->cli_files_list)
 		ft_lstadd_back(&args->cli_dirs_list, ft_lstnew(ft_strdup(".")));
-	/*
-	ft_printf("Directories:\n");
-	print_list_aux(args->cli_dirs_list);
-	ft_printf("Files:\n");
-	print_list_aux(args->cli_files_list);
-	ft_printf("\n");
-	*/
 	args->first_printing = true;
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:17:13 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 13:01:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:52:36 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,33 @@ int	compare_names_cli(const void *a, const void *b, bool reverse)
 		return (ft_strcmp((char *)b, (char *)a));
 	else
 		return (ft_strcmp((char *)a, (char *)b));
+}
+
+// Comparison function to sort the list of command line arguments by their time.
+// List is contained either in args->cli_dirs_list or in args->cli_files_list.
+// In that case *content of the list nodes is just a string (file/dir name).
+// lstat() is used to get the file's last modification time from their names.
+// See comments below in compare_stat_times() for more details.
+int	compare_times_cli(const void *a, const void *b, bool reverse)
+{
+	struct stat	stat_a;
+	struct stat	stat_b;
+	int8_t		result;
+
+	result = -1;
+	if (reverse)
+		result = 1;
+	lstat((char *)a, &stat_a);
+	lstat((char *)b, &stat_b);
+	if (stat_a.st_mtime > stat_b.st_mtime)
+		return (1 * result);
+	if (stat_a.st_mtime < stat_b.st_mtime)
+		return (-1 * result);
+	if (stat_a.st_mtim.tv_nsec > stat_b.st_mtim.tv_nsec)
+		return (1 * result);
+	if (stat_a.st_mtim.tv_nsec < stat_b.st_mtim.tv_nsec)
+		return (-1 * result);
+	return (ft_strcmp((char *)b, (char *)a) * result);
 }
 
 // Comparison function to sort the list of directory entries by their d_name.
@@ -65,5 +92,5 @@ int	compare_stat_times(const void *a, const void *b, bool reverse)
 		return (1 * result);
 	if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
 		return (-1 * result);
-	return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name));
+	return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name) * result);
 }

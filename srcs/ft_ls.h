@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 00:08:44 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 13:25:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	free_allocated_memory(t_args *args);
 
 /********************************** merge_sort_comp.c *************************/
 int		compare_names_cli(const void *a, const void *b, bool reverse);
+int		compare_times_cli(const void *a, const void *b, bool reverse);
 int		compare_d_names(const void *a, const void *b, bool reverse);
 int		compare_stat_times(const void *a, const void *b, bool reverse);
 

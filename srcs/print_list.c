@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 13:10:48 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:13:21 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 		ft_printf("\n");
 	else
 		args->first_printing = false;
-	if (ft_lstsize(args->cli_dirs_list) > 1)
+	if (ft_lstsize(args->cli_dirs_list) > 1 || args->recursive || \
+	(args->cli_dirs_list && args->cli_files_list))
 	{
 		if (ft_strchr(current_path, ' ') != NULL)
 			ft_printf("'%s':\n", current_path);
