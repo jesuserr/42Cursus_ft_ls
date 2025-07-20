@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/19 10:43:51 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 00:08:44 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ typedef struct s_args
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
 	bool		sort_by_time;		// option -t
-	t_list		*cli_files_list;	// linked list of files/directories to 'ls'
+	t_list		*cli_files_list;	// linked list of files to 'ls'
+	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
 	bool		first_printing;		// used to not print "\n" the first time
 }	t_args;
 
@@ -86,6 +87,7 @@ void	print_usage(void);
 
 /********************************** print_list.c ******************************/
 void	print_list_aux(t_list *list);
+void	print_list_aux2(t_list *list);
 void	print_list(t_args *args, t_list *entries_list, const char *curr_path);
 
 #endif

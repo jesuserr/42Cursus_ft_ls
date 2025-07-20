@@ -6,15 +6,15 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:17:13 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/18 21:17:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/20 13:01:12 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 // Comparison function to sort the list of command line arguments by their name.
-// List is contained in args->cli_files_list. In that case *content of the list
-// nodes is just a string (file/directory name).
+// List is contained either in args->cli_dirs_list or in args->cli_files_list.
+// In that case *content of the list nodes is just a string (file/dir name).
 int	compare_names_cli(const void *a, const void *b, bool reverse)
 {
 	if (reverse)
