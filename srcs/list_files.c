@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/19 22:38:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/21 09:12:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ void	list_files(t_args *args, const char *current_path)
 	entry = readdir(directory);
 	while (entry)
 	{
+		if (entry->d_name[0] == '.' && !args->all)
+		{
+			entry = readdir(directory);
+			continue ;
+		}
 		new_entry_data = malloc(sizeof(t_entry_data));
 		full_path = build_full_path(current_path, entry);
 		lstat(full_path, &new_entry_data->stat_buf);
