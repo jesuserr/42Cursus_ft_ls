@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 22:13:21 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:19:04 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,19 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 		else
 			ft_printf("%s:\n", current_path);
 	}
+	if (args->long_listing)
+		ft_printf("total %d\n", calculate_total_blocks(args, entries_list));
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
 		if (entry_data->entry.d_name[0] == '.' && !args->all)
 		{
+			entries_list = entries_list->next;
+			continue ;
+		}
+		if (args->long_listing)
+		{
+			print_long_listing(entry_data);
 			entries_list = entries_list->next;
 			continue ;
 		}
@@ -67,5 +75,6 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 			ft_printf("%s  ", entry_data->entry.d_name);
 		entries_list = entries_list->next;
 	}
-	ft_printf("\n");
+	if (!args->long_listing)
+		ft_printf("\n");
 }

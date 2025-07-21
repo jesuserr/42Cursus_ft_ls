@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 13:25:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:20:20 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@
 # include <sys/stat.h>				// for stat, lstat
 # include <stdbool.h>				// for booleans
 # include <stdint.h>				// for fixed-width integer types
-# include <time.h>					// for time
+# include <time.h>					// for ctime
+# include <pwd.h>					// for getpwuid struct
+# include <grp.h>					// for getgrgid struct
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -64,31 +66,35 @@ typedef struct s_entry_data
 **                        FUNCTION PROTOTYPES
 */
 /********************************** list_files.c ******************************/
-void	list_files(t_args *args, const char *current_path);
+void		list_files(t_args *args, const char *current_path);
 
 /********************************** main.c ************************************/
-void	free_allocated_memory(t_args *args);
+void		free_allocated_memory(t_args *args);
 
 /********************************** merge_sort_comp.c *************************/
-int		compare_names_cli(const void *a, const void *b, bool reverse);
-int		compare_times_cli(const void *a, const void *b, bool reverse);
-int		compare_d_names(const void *a, const void *b, bool reverse);
-int		compare_stat_times(const void *a, const void *b, bool reverse);
+int			compare_names_cli(const void *a, const void *b, bool reverse);
+int			compare_times_cli(const void *a, const void *b, bool reverse);
+int			compare_d_names(const void *a, const void *b, bool reverse);
+int			compare_stat_times(const void *a, const void *b, bool reverse);
 
 /********************************** merge_sort.c ******************************/
-void	sort_list(t_list **list, t_compare_func compare, bool reverse);
+void		sort_list(t_list **list, t_compare_func compare, bool reverse);
 
 /********************************** parser.c **********************************/
-void	parse_arguments(char **argv, t_args *args);
+void		parse_arguments(char **argv, t_args *args);
 
 /********************************** print_errors.c ****************************/
-void	print_invalid_option_and_exit(const char option, t_args *args);
-void	print_perror_and_exit(const char *msg, t_args *args);
-void	print_usage(void);
+void		print_invalid_option_and_exit(const char option, t_args *args);
+void		print_perror_and_exit(const char *msg, t_args *args);
+void		print_usage(void);
 
 /********************************** print_list.c ******************************/
-void	print_list_aux(t_list *list);
-void	print_list_aux2(t_list *list);
-void	print_list(t_args *args, t_list *entries_list, const char *curr_path);
+void		print_list_aux(t_list *list);
+void		print_list_aux2(t_list *list);
+void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
+
+/********************************** print_long_list.c *************************/
+uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list);
+void		print_long_listing(t_entry_data *entry_data);
 
 #endif
