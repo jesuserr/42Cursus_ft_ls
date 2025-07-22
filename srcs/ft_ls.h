@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/21 13:20:20 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:00:39 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              DEFINES
 */
+# define SECONDS_IN_6_MONTHS	(6 * 30 * 24 * 60 * 60)  // 15,552,000 seconds
+# define CTIME_SIZE				26	// size of ctime string, including '\0'
+# define SKIP_DAY				4	// characters to skip day in ctime string
+
 // Function pointer type for comparison functions. Creates a type called
 // t_compare_func that points to a function that takes two const void pointers
 // and boolean reverse as arguments and returns an int.

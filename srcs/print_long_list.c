@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/21 13:19:23 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/22 14:03:08 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,31 @@ uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list)
 	return (total_blocks / 2);
 }
 
+static char	*get_formatted_time(struct stat *stat_buf)
+{
+	char	*ctime_time;
+	char	ctime_copy[CTIME_SIZE];
+	time_t	current_time;
+
+	current_time = time(NULL);
+	if (current_time == (time_t)-1)
+		return (NULL);
+	ctime_time = ctime(&stat_buf->st_mtime);
+	if (ctime_time == NULL)
+		return (NULL);
+	ft_strlcpy(ctime_copy, ctime_time, sizeof(ctime_copy));
+	if (current_time - stat_buf->st_mtime > SECONDS_IN_6_MONTHS)
+		ft_strlcpy(ctime_copy + 11, ctime_copy + 19, 6);
+	ctime_copy[16] = '\0';
+	return (ft_strdup(ctime_copy + SKIP_DAY));
+}
+
 // Prints the long listing format for a single file entry.
 void	print_long_listing(t_entry_data *entry_data)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
+	char			*formatted_time;
 
 	user_info = getpwuid(entry_data->stat_buf.st_uid);
 	group_info = getgrgid(entry_data->stat_buf.st_gid);
@@ -93,8 +113,10 @@ void	print_long_listing(t_entry_data *entry_data)
 	else
 		ft_printf("%d ", entry_data->stat_buf.st_gid);
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
+	formatted_time = get_formatted_time(&entry_data->stat_buf);
+	ft_printf(" %s", formatted_time);
 	ft_printf(" %s \n", entry_data->entry.d_name);
-	//ft_printf("Last modified: %s", ctime(&entry_data->stat_buf.st_mtime));
+	free(formatted_time);
 }
 
 // make && ./ft_ls /mnt/g/Videos/Documentales/Blue\ Planet\ II -l
