@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/22 14:03:08 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 00:55:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list)
 	return (total_blocks / 2);
 }
 
+// Formats file modification time for long output. Returns "Mon DD HH:MM" format
+// for recent files (within 6 months) or "Mon DD  YYYY" for older files. Uses
+// ctime() string manipulation to extract month, day, and time/year components.
+// Returns dynamically allocated string that caller must free.
 static char	*get_formatted_time(struct stat *stat_buf)
 {
 	char	*ctime_time;
@@ -91,18 +95,64 @@ static char	*get_formatted_time(struct stat *stat_buf)
 	return (ft_strdup(ctime_copy + SKIP_DAY));
 }
 
+// Prints file type and permission string in ls -l format. First character shows
+// file type (-, d, l, etc.). Following nine characters show owner, group, and
+// other permissions (rwx). Handles special bits: setuid/setgid (s/S) and sticky
+// bit (t/T). Uppercase indicates special bit set without execute permission.
+static void	print_file_permissions(mode_t mode)
+{
+	char	perms[PERMISSIONS_SIZE];
+
+	if (S_ISREG(mode))
+		perms[0] = '-';
+	else if (S_ISDIR(mode))
+		perms[0] = 'd';
+	else if (S_ISCHR(mode))
+		perms[0] = 'c';
+	else if (S_ISBLK(mode))
+		perms[0] = 'b';
+	else if (S_ISFIFO(mode))
+		perms[0] = 'p';
+	else if (S_ISSOCK(mode))
+		perms[0] = 's';
+	else if (S_ISLNK(mode))
+		perms[0] = 'l';
+	else
+		perms[0] = '?';
+	perms[1] = (mode & S_IRUSR) ? 'r' : '-';
+	perms[2] = (mode & S_IWUSR) ? 'w' : '-';
+	if (mode & S_ISUID)
+		perms[3] = (mode & S_IXUSR) ? 's' : 'S';
+	else
+		perms[3] = (mode & S_IXUSR) ? 'x' : '-';
+	perms[4] = (mode & S_IRGRP) ? 'r' : '-';
+	perms[5] = (mode & S_IWGRP) ? 'w' : '-';
+	if (mode & S_ISGID)
+		perms[6] = (mode & S_IXGRP) ? 's' : 'S';
+	else
+		perms[6] = (mode & S_IXGRP) ? 'x' : '-';
+	perms[7] = (mode & S_IROTH) ? 'r' : '-';
+	perms[8] = (mode & S_IWOTH) ? 'w' : '-';
+	if (mode & S_ISVTX)
+		perms[9] = (mode & S_IXOTH) ? 't' : 'T';
+	else
+		perms[9] = (mode & S_IXOTH) ? 'x' : '-';
+	perms[10] = '\0';
+	ft_printf("%s ", perms);
+}
+
 // Prints the long listing format for a single file entry.
+// The Linux Programming Interface - Chapter 15
 void	print_long_listing(t_entry_data *entry_data)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
 	char			*formatted_time;
 
+	print_file_permissions(entry_data->stat_buf.st_mode);
+	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
 	user_info = getpwuid(entry_data->stat_buf.st_uid);
 	group_info = getgrgid(entry_data->stat_buf.st_gid);
-	printf("%o ", entry_data->stat_buf.st_mode & 0777);
-	fflush(stdout);
-	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
 	ft_printf("\t");
 	if (user_info)
 		ft_printf(" %s ", user_info->pw_name);
