@@ -6,36 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 17:00:54 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:53:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-// Auxiliar function for debugging purposes. Delete at the end of the project.
-void	print_list_aux(t_list *list)
-{
-	while (list)
-	{
-		ft_printf("Content: %s\n", (char *)list->content);
-		list = list->next;
-	}
-}
-
-// Auxiliar function for debugging purposes. Delete at the end of the project.
-void	print_list_aux2(t_list *list)
-{
-	t_list			*backup;
-	struct dirent	*subdir_entry;
-
-	backup = list;
-	while (backup)
-	{
-		subdir_entry = &((t_entry_data *)backup->content)->entry;
-		ft_printf("- %s\n", subdir_entry->d_name);
-		backup = backup->next;
-	}
-}
 
 // Prints file name with proper formatting (long or simple). Handles filenames
 // containing spaces by wrapping them in single quotes as real ls. For symbolic
@@ -43,7 +18,7 @@ void	print_list_aux2(t_list *list)
 // format. If target path contains spaces, it's also quoted. Handles readlink
 // errors by displaying "?" for unreadable link targets.
 void	print_file_name(t_entry_data *entry_data, const char *current_path, \
-		bool long_format)
+bool long_format)
 {
 	char	*file_name;
 	char	*full_path;

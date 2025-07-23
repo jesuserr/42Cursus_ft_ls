@@ -6,11 +6,35 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 21:33:00 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:41:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+static void	print_invalid_option_and_exit(const char option, t_args *args)
+{
+	ft_putstr_fd("ft_ls: invalid option -- '", STDERR_FILENO);
+	ft_putchar_fd(option, STDERR_FILENO);
+	ft_putstr_fd("'\n", STDERR_FILENO);
+	ft_putstr_fd("Try 'ft_ls --help' for more information.\n", STDERR_FILENO);
+	free_allocated_memory(args);
+	exit (EXIT_FAILURE);
+}
+
+static void	print_usage(void)
+{
+	ft_printf("Usage:\n"
+		"  ft_ls [OPTION]... [FILE]...\n\n"
+		"Options:\n"
+		"  --help                  display this help and exit\n"
+		"  -a                      do not ignore entries starting with .\n"
+		"  -l                      use a long listing format\n"
+		"  -r                      reverse order while sorting\n"
+		"  -R                      list subdirectories recursively\n"
+		"  -t                      sort by time, newest first\n");
+	exit(EXIT_SUCCESS);
+}
 
 // Uses lstat() to check if entity exists and determine its type. Directories
 // are added to cli_dirs_list, while regular files and symbolic links are added

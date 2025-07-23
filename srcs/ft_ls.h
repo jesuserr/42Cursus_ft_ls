@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 16:57:04 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:55:40 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,7 @@ void		sort_list(t_list **list, t_compare_func compare, bool reverse);
 /********************************** parser.c **********************************/
 void		parse_arguments(char **argv, t_args *args);
 
-/********************************** print_errors.c ****************************/
-void		print_invalid_option_and_exit(const char option, t_args *args);
-void		print_perror_and_exit(const char *msg, t_args *args);
-void		print_usage(void);
-
 /********************************** print_list.c ******************************/
-void		print_list_aux(t_list *list);
-void		print_list_aux2(t_list *list);
 void		print_file_name(t_entry_data *entry_data, const char *current_path, \
 			bool long_format);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
