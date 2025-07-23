@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 15:58:49 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:41:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,9 @@ void	print_long_line(t_entry_data *entry_data, const char *current_path)
 	struct passwd	*user_info;
 	struct group	*group_info;
 	char			*formatted_time;
+	bool			long_format;
 
+	long_format = true;
 	print_file_permissions(entry_data->stat_buf.st_mode);
 	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
 	user_info = getpwuid(entry_data->stat_buf.st_uid);
@@ -160,7 +162,7 @@ void	print_long_line(t_entry_data *entry_data, const char *current_path)
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
 	ft_printf(" %s ", formatted_time);
-	print_file_name(entry_data, current_path);
+	print_file_name(entry_data, current_path, long_format);
 	ft_printf("\n");
 	free(formatted_time);
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 16:14:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:00:54 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	print_list_aux2(t_list *list)
 // links, displays the link target using readlink() and shows the "-> target"
 // format. If target path contains spaces, it's also quoted. Handles readlink
 // errors by displaying "?" for unreadable link targets.
-void	print_file_name(t_entry_data *entry_data, const char *current_path)
+void	print_file_name(t_entry_data *entry_data, const char *current_path, \
+		bool long_format)
 {
 	char	*file_name;
 	char	*full_path;
@@ -54,7 +55,7 @@ void	print_file_name(t_entry_data *entry_data, const char *current_path)
 		ft_printf("'%s'  ", file_name);
 	else
 		ft_printf("%s  ", file_name);
-	if (S_ISLNK(entry_data->stat_buf.st_mode))
+	if (S_ISLNK(entry_data->stat_buf.st_mode) && long_format)
 	{
 		ft_printf("-> ");
 		full_path = build_full_path(current_path, &entry_data->entry);
@@ -98,7 +99,8 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 	{
 		while (entries_list)
 		{
-			print_file_name((t_entry_data *)entries_list->content, current_path);
+			print_file_name((t_entry_data *)entries_list->content, current_path, \
+			args->long_listing);
 			entries_list = entries_list->next;
 		}
 		ft_printf("\n");

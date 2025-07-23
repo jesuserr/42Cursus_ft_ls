@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 15:28:44 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:13:37 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	list_files(t_args *args, const char *current_path)
 	if (args->long_listing)
 		print_long_line(entry_data, current_path);
 	else
-		print_file_name(entry_data, current_path);
+		print_file_name(entry_data, current_path, args->long_listing);
 	free(entry_data);
 	args->first_printing = false;
 }
@@ -112,7 +112,7 @@ void	list_dirs(t_args *args, const char *current_path)
 	directory = opendir(current_path);
 	if (directory == NULL)
 	{
-		ft_printf("ft_ls: cannot open directory '%s': ", current_path);
+		ft_printf("\nft_ls: cannot open directory '%s': ", current_path);
 		perror("");
 		return ;
 	}

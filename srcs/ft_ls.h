@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 15:55:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:57:04 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void		print_usage(void);
 /********************************** print_list.c ******************************/
 void		print_list_aux(t_list *list);
 void		print_list_aux2(t_list *list);
-void		print_file_name(t_entry_data *entry_data, const char *current_path);
+void		print_file_name(t_entry_data *entry_data, const char *current_path, \
+			bool long_format);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
 
 /********************************** print_long_format.c ***********************/
