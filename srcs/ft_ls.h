@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 00:22:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:28:09 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/stat.h>				// for stat, lstat
 # include <stdbool.h>				// for booleans
 # include <stdint.h>				// for fixed-width integer types
-# include <time.h>					// for ctime
+# include <time.h>					// for ctime, time
 # include <pwd.h>					// for getpwuid struct
 # include <grp.h>					// for getgrgid struct
 
@@ -72,6 +72,7 @@ typedef struct s_entry_data
 */
 /********************************** list_files.c ******************************/
 void		list_files(t_args *args, const char *current_path);
+void		list_dirs(t_args *args, const char *current_path);
 
 /********************************** main.c ************************************/
 void		free_allocated_memory(t_args *args);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 12:23:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:35:02 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,13 @@ int	main(int argc, char **argv)
 	list = args.cli_files_list;
 	while (list)
 	{
-		ft_printf("%s  ", (char *)list->content);
-		args.first_printing = false;
+		list_files(&args, (char *)list->content);
 		list = list->next;
-		if (!list)
-			ft_printf("\n");
 	}
 	list = args.cli_dirs_list;
 	while (list)
 	{
-		list_files(&args, (char *)list->content);
+		list_dirs(&args, (char *)list->content);
 		list = list->next;
 	}
 	free_allocated_memory(&args);

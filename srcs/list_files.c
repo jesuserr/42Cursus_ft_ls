@@ -6,11 +6,35 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/21 09:12:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:35:53 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+// Lists a single file entry. Creates temporary entry_data structure, populates
+// it with lstat information and path name, then prints in appropriate
+// format (long listing or simple name). Handles filenames with spaces by adding
+// quotes. Used for individual file arguments passed to ft_ls command.
+void	list_files(t_args *args, const char *current_path)
+{
+	t_entry_data	*entry_data;
+
+	entry_data = malloc(sizeof(t_entry_data));
+	lstat(current_path, &entry_data->stat_buf);
+	ft_strlcpy(entry_data->entry.d_name, current_path, sizeof(entry_data->entry.d_name));
+	if (args->long_listing)
+		print_long_listing(entry_data);
+	else
+	{
+		if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)
+			ft_printf("'%s'  ", entry_data->entry.d_name);
+		else
+			ft_printf("%s  ", entry_data->entry.d_name);
+	}
+	free(entry_data);
+	args->first_printing = false;
+}
 
 // Build full path for a file or directory entry. Used for lstat and recursive
 // calls to list_files. It allocates enough memory for the full path, including
@@ -49,7 +73,7 @@ static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 }
 
 // Processes subdirectories for recursive listing. Sorts the subdirectory list
-// by name or time, then recursively calls list_files() on each subdirectory
+// by name or time, then recursively calls list_dirs() on each subdirectory
 // using their full paths. Properly manages memory by freeing paths and clearing
 // the subdirectories list after processing.
 static void	process_subdirs(t_args *args, t_list *subdirs_list, const char *current_path)
@@ -67,7 +91,7 @@ static void	process_subdirs(t_args *args, t_list *subdirs_list, const char *curr
 	{
 		subdir_entry = &((t_entry_data *)current_subdir->content)->entry;
 		subdir_full_path = build_full_path(current_path, subdir_entry);
-		list_files(args, subdir_full_path);
+		list_dirs(args, subdir_full_path);
 		free(subdir_full_path);
 		current_subdir = current_subdir->next;
 	}
@@ -80,7 +104,7 @@ static void	process_subdirs(t_args *args, t_list *subdirs_list, const char *curr
 // on arguments. After printing the current directory contents, it processes
 // subdirectories recursively if the recursive flag is set. Memory is properly
 // cleaned up after processing.
-void	list_files(t_args *args, const char *current_path)
+void	list_dirs(t_args *args, const char *current_path)
 {
 	DIR				*directory;
 	struct dirent	*entry;

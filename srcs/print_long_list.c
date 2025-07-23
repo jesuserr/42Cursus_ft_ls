@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 00:55:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:36:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,11 @@ void	print_long_listing(t_entry_data *entry_data)
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
 	ft_printf(" %s", formatted_time);
-	ft_printf(" %s \n", entry_data->entry.d_name);
+	if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)
+		ft_printf(" '%s'  ", entry_data->entry.d_name);
+	else
+		ft_printf(" %s  ", entry_data->entry.d_name);
+	ft_printf("\n");
 	free(formatted_time);
 }
 
