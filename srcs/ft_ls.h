@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 11:28:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:41:15 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void		print_list_aux(t_list *list);
 void		print_list_aux2(t_list *list);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
 
-/********************************** print_long_list.c *************************/
-uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list);
-void		print_long_listing(t_entry_data *entry_data);
+/********************************** print_long_format.c ***********************/
+void		print_long_line(t_entry_data *entry_data);
+void		print_long_format(t_list *entries_list);
 
 #endif

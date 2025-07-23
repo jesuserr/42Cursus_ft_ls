@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 11:35:53 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:29:18 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 // Lists a single file entry. Creates temporary entry_data structure, populates
 // it with lstat information and path name, then prints in appropriate
-// format (long listing or simple name). Handles filenames with spaces by adding
-// quotes. Used for individual file arguments passed to ft_ls command.
+// format (long or simple name). Handles filenames with spaces by adding quotes.
+// Used for individual file arguments passed to ft_ls command.
 void	list_files(t_args *args, const char *current_path)
 {
 	t_entry_data	*entry_data;
@@ -24,7 +24,7 @@ void	list_files(t_args *args, const char *current_path)
 	lstat(current_path, &entry_data->stat_buf);
 	ft_strlcpy(entry_data->entry.d_name, current_path, sizeof(entry_data->entry.d_name));
 	if (args->long_listing)
-		print_long_listing(entry_data);
+		print_long_line(entry_data);
 	else
 	{
 		if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)

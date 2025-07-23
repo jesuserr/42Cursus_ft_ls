@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_long_list.c                                  :+:      :+:    :+:   */
+/*   print_long_format.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 11:36:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:46:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	print_size_t_as_digits(uint64_t nbr)
 // st_blocks is in 512-byte blocks, so we divide by 2 to convert to 1K blocks.
 // Only counts printed files and this amount represents actual disk usage, not
 // just file sizes.
-uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list)
+static uint64_t	calculate_total_blocks(t_list *entries_list)
 {
 	t_entry_data	*entry_data;
 	uint64_t		total_blocks;
@@ -61,11 +61,6 @@ uint64_t	calculate_total_blocks(t_args *args, t_list *entries_list)
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
-		if (entry_data->entry.d_name[0] == '.' && !args->all)
-		{
-			entries_list = entries_list->next;
-			continue ;
-		}
 		total_blocks += entry_data->stat_buf.st_blocks;
 		entries_list = entries_list->next;
 	}
@@ -143,7 +138,7 @@ static void	print_file_permissions(mode_t mode)
 
 // Prints the long listing format for a single file entry.
 // The Linux Programming Interface - Chapter 15
-void	print_long_listing(t_entry_data *entry_data)
+void	print_long_line(t_entry_data *entry_data)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
@@ -171,6 +166,19 @@ void	print_long_listing(t_entry_data *entry_data)
 		ft_printf(" %s  ", entry_data->entry.d_name);
 	ft_printf("\n");
 	free(formatted_time);
+}
+
+void	print_long_format(t_list *entries_list)
+{
+	t_entry_data	*entry_data;
+
+	ft_printf("total %d\n", calculate_total_blocks(entries_list));
+	while (entries_list)
+	{
+		entry_data = (t_entry_data *)entries_list->content;
+		print_long_line(entry_data);
+		entries_list = entries_list->next;
+	}
 }
 
 // make && ./ft_ls /mnt/g/Videos/Documentales/Blue\ Planet\ II -l
