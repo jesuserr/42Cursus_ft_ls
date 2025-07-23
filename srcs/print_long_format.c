@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 13:46:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 15:58:49 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ static void	print_file_permissions(mode_t mode)
 
 // Prints the long listing format for a single file entry.
 // The Linux Programming Interface - Chapter 15
-void	print_long_line(t_entry_data *entry_data)
+void	print_long_line(t_entry_data *entry_data, const char *current_path)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
@@ -159,16 +159,13 @@ void	print_long_line(t_entry_data *entry_data)
 		ft_printf("%d ", entry_data->stat_buf.st_gid);
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
-	ft_printf(" %s", formatted_time);
-	if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)
-		ft_printf(" '%s'  ", entry_data->entry.d_name);
-	else
-		ft_printf(" %s  ", entry_data->entry.d_name);
+	ft_printf(" %s ", formatted_time);
+	print_file_name(entry_data, current_path);
 	ft_printf("\n");
 	free(formatted_time);
 }
 
-void	print_long_format(t_list *entries_list)
+void	print_long_format(t_list *entries_list, const char *current_path)
 {
 	t_entry_data	*entry_data;
 
@@ -176,9 +173,7 @@ void	print_long_format(t_list *entries_list)
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
-		print_long_line(entry_data);
+		print_long_line(entry_data, current_path);
 		entries_list = entries_list->next;
 	}
 }
-
-// make && ./ft_ls /mnt/g/Videos/Documentales/Blue\ Planet\ II -l

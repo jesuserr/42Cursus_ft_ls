@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 13:39:08 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:14:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,49 @@ void	print_list_aux2(t_list *list)
 	}
 }
 
+// Prints file name with proper formatting (long or simple). Handles filenames
+// containing spaces by wrapping them in single quotes as real ls. For symbolic
+// links, displays the link target using readlink() and shows the "-> target"
+// format. If target path contains spaces, it's also quoted. Handles readlink
+// errors by displaying "?" for unreadable link targets.
+void	print_file_name(t_entry_data *entry_data, const char *current_path)
+{
+	char	*file_name;
+	char	*full_path;
+	char	buffer[PATH_MAX];
+	int64_t	read_bytes;
+
+	file_name = entry_data->entry.d_name;
+	if (ft_strchr(file_name, ' ') != NULL)
+		ft_printf("'%s'  ", file_name);
+	else
+		ft_printf("%s  ", file_name);
+	if (S_ISLNK(entry_data->stat_buf.st_mode))
+	{
+		ft_printf("-> ");
+		full_path = build_full_path(current_path, &entry_data->entry);
+		read_bytes = readlink(full_path, buffer, sizeof(buffer) - 1);
+		if (read_bytes != -1)
+		{
+			buffer[read_bytes] = '\0';
+			if (ft_strchr(buffer, ' ') != NULL)
+				ft_printf("'%s' ", buffer);
+			else
+				ft_printf("%s ", buffer);
+		}
+		else
+			ft_printf("?");
+		free(full_path);
+	}
+}
+
+// Prints the complete listing of directory entries with appropriate formatting.
+// Handles directory headers when multiple directories are listed or recursion
+// is enabled. Wraps directory paths containing spaces in quotes. Delegates to
+// print_long_format for detailed listings (-l option) or iterates through
+// entries calling print_file_name for simple format, ending with newline.
 void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 {
-	t_entry_data	*entry_data;
-
 	if (!args->first_printing)
 		ft_printf("\n");
 	else
@@ -54,16 +93,12 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 			ft_printf("%s:\n", current_path);
 	}
 	if (args->long_listing)
-		print_long_format(entries_list);
+		print_long_format(entries_list, current_path);
 	else
 	{
 		while (entries_list)
 		{
-			entry_data = (t_entry_data *)entries_list->content;
-			if (ft_strchr(entry_data->entry.d_name, ' ') != NULL)
-				ft_printf("'%s'  ", entry_data->entry.d_name);
-			else
-				ft_printf("%s  ", entry_data->entry.d_name);
+			print_file_name((t_entry_data *)entries_list->content, current_path);
 			entries_list = entries_list->next;
 		}
 		ft_printf("\n");

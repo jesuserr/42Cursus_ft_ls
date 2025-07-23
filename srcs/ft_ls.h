@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 13:41:15 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 15:55:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_entry_data
 */
 /********************************** list_files.c ******************************/
 void		list_files(t_args *args, const char *current_path);
+char		*build_full_path(const char *curr_pth, const struct dirent *entry);
 void		list_dirs(t_args *args, const char *current_path);
 
 /********************************** main.c ************************************/
@@ -97,10 +98,11 @@ void		print_usage(void);
 /********************************** print_list.c ******************************/
 void		print_list_aux(t_list *list);
 void		print_list_aux2(t_list *list);
+void		print_file_name(t_entry_data *entry_data, const char *current_path);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
 
 /********************************** print_long_format.c ***********************/
-void		print_long_line(t_entry_data *entry_data);
-void		print_long_format(t_list *entries_list);
+void		print_long_line(t_entry_data *entry_data, const char *current_path);
+void		print_long_format(t_list *entries_list, const char *current_path);
 
 #endif
