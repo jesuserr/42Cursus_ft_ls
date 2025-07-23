@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_files.c                                       :+:      :+:    :+:   */
+/*   list_routines.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 17:13:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 22:03:33 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	list_files(t_args *args, const char *current_path)
 }
 
 // Build full path for a file or directory entry. Used for lstat and recursive
-// calls to list_files. It allocates enough memory for the full path, including
+// calls to list_dirs(). It allocates enough memory for the full path, including
 // the null terminator. It also ensures that there is a '/' between the current
 // path and the entry name, unless the current path ends with '/'.
 char	*build_full_path(const char *current_path, const struct dirent *entry)
@@ -147,5 +147,5 @@ void	list_dirs(t_args *args, const char *current_path)
 	if (subdirs_list)
 		process_subdirs(args, subdirs_list, current_path);
 	closedir(directory);
-	ft_lstclear(&entries_list, free);
+	//ft_lstclear(&entries_list, free);
 }
