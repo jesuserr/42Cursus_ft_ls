@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 22:03:33 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:45:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,5 +147,5 @@ void	list_dirs(t_args *args, const char *current_path)
 	if (subdirs_list)
 		process_subdirs(args, subdirs_list, current_path);
 	closedir(directory);
-	//ft_lstclear(&entries_list, free);
+	ft_lstclear(&entries_list, free);
 }
