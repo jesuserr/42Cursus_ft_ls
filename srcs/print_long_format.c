@@ -6,47 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 16:41:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/24 17:00:37 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-// Function needed because my ft_printf does not support 'size_t' printing.
-// It is assumed that 'nbr' will be 64-bit unsigned integer and therefore, 20
-// digits will be enough to represent its maximum value.
-static void	print_size_t_as_digits(uint64_t nbr)
-{
-	uint8_t	digits[20];
-	uint8_t	i;
-	bool	leading_zero;
-
-	if (nbr == 0)
-	{
-		ft_printf("0");
-		return ;
-	}
-	i = 0;
-	while (i < 20)
-		digits[i++] = 0;
-	i = 19;
-	digits [i--] = nbr % 10;
-	nbr = nbr / 10;
-	while (nbr >= 10)
-	{
-		digits[i--] = nbr % 10;
-		nbr = nbr / 10;
-	}
-	digits[i--] = (int)nbr;
-	leading_zero = true;
-	while (i < 20)
-	{
-		while (digits[i] == 0 && leading_zero)
-			i++;
-		ft_printf("%d", digits[i++]);
-		leading_zero = false;
-	}
-}
 
 // Calculates the total number of 1K blocks used by the files in the list.
 // st_blocks is in 512-byte blocks, so we divide by 2 to convert to 1K blocks.
@@ -138,7 +102,8 @@ static void	print_file_permissions(mode_t mode)
 
 // Prints the long listing format for a single file entry.
 // The Linux Programming Interface - Chapter 15
-void	print_long_line(t_entry_data *entry_data, const char *current_path)
+void	print_long_line(t_entry_data *entry_data, const char *current_path, \
+t_widths *widths)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
@@ -147,18 +112,25 @@ void	print_long_line(t_entry_data *entry_data, const char *current_path)
 
 	long_format = true;
 	print_file_permissions(entry_data->stat_buf.st_mode);
+	print_blank_spaces(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
 	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
 	user_info = getpwuid(entry_data->stat_buf.st_uid);
 	group_info = getgrgid(entry_data->stat_buf.st_gid);
-	ft_printf("\t");
 	if (user_info)
+	{
 		ft_printf(" %s ", user_info->pw_name);
+		print_blank_spaces(widths->user_w - ft_strlen(user_info->pw_name));
+	}
 	else
 		ft_printf(" %d ", entry_data->stat_buf.st_uid);
 	if (group_info)
+	{
 		ft_printf("%s ", group_info->gr_name);
+		print_blank_spaces(widths->group_w - ft_strlen(group_info->gr_name));
+	}
 	else
 		ft_printf("%d ", entry_data->stat_buf.st_gid);
+	print_blank_spaces(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
 	ft_printf(" %s ", formatted_time);
@@ -167,15 +139,22 @@ void	print_long_line(t_entry_data *entry_data, const char *current_path)
 	free(formatted_time);
 }
 
+// Displays directory contents in detailed long format. Prints total disk usage
+// header, calculates maximum column widths and then iterates through entries
+// printing each file's detailed information via print_long_line().
+// Frees allocated width structure.
 void	print_long_format(t_list *entries_list, const char *current_path)
 {
 	t_entry_data	*entry_data;
+	t_widths		*widths;
 
 	ft_printf("total %d\n", calculate_total_blocks(entries_list));
+	widths = calculate_fields_widths(entries_list);
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
-		print_long_line(entry_data, current_path);
+		print_long_line(entry_data, current_path, widths);
 		entries_list = entries_list->next;
 	}
+	free(widths);
 }

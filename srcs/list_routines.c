@@ -6,29 +6,35 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 23:45:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/24 16:46:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-// Lists a single file entry. Creates temporary entry_data structure, populates
-// it with lstat information and path name, then prints in appropriate
-// format (long or simple name). Used for individual file arguments passed to
-// ft_ls command.
-void	list_files(t_args *args, const char *current_path)
+// Traverses the linked list of files and prints each file entry in the
+// specified format (long or simple). Reminder, used for command-line file
+// arguments, not directory contents.
+void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 {
+	t_list			*list;
 	t_entry_data	*entry_data;
+	char			*current_path;
 
-	entry_data = malloc(sizeof(t_entry_data));
-	lstat(current_path, &entry_data->stat_buf);
-	ft_strlcpy(entry_data->entry.d_name, current_path, sizeof(entry_data->entry.d_name));
-	if (args->long_listing)
-		print_long_line(entry_data, current_path);
-	else
-		print_file_name(entry_data, current_path, args->long_listing);
-	free(entry_data);
-	args->first_printing = false;
+	list = entries_list;
+	while (list)
+	{
+		entry_data = (t_entry_data *)list->content;
+		current_path = entry_data->entry.d_name;
+		if (args->long_listing)
+			print_long_line(entry_data, current_path, widths);
+		else
+			print_file_name(entry_data, current_path, args->long_listing);
+		args->first_printing = false;
+		list = list->next;
+		if (!list && !args->long_listing)
+			ft_printf("\n");
+	}
 }
 
 // Build full path for a file or directory entry. Used for lstat and recursive
@@ -71,7 +77,8 @@ static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
 // by name or time, then recursively calls list_dirs() on each subdirectory
 // using their full paths. Properly manages memory by freeing paths and clearing
 // the subdirectories list after processing.
-static void	process_subdirs(t_args *args, t_list *subdirs_list, const char *current_path)
+static void	process_subdirs(t_args *args, t_list *subdirs_list, \
+const char *current_path)
 {
 	t_list			*current_subdir;
 	char			*subdir_full_path;
@@ -112,7 +119,7 @@ void	list_dirs(t_args *args, const char *current_path)
 	directory = opendir(current_path);
 	if (directory == NULL)
 	{
-		ft_printf("\nft_ls: cannot open directory '%s': ", current_path);
+		ft_printf("ft_ls: cannot open directory '%s': ", current_path);
 		perror("");
 		return ;
 	}

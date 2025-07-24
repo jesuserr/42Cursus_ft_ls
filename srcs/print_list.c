@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 17:53:52 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/24 00:03:43 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,23 @@ bool long_format)
 
 	file_name = entry_data->entry.d_name;
 	if (ft_strchr(file_name, ' ') != NULL)
-		ft_printf("'%s'  ", file_name);
+		ft_printf("'%s'", file_name);
 	else
-		ft_printf("%s  ", file_name);
+		ft_printf("%s", file_name);
+	if (!long_format)
+		ft_printf("  ");
 	if (S_ISLNK(entry_data->stat_buf.st_mode) && long_format)
 	{
-		ft_printf("-> ");
+		ft_printf(" -> ");
 		full_path = build_full_path(current_path, &entry_data->entry);
 		read_bytes = readlink(full_path, buffer, sizeof(buffer) - 1);
 		if (read_bytes != -1)
 		{
 			buffer[read_bytes] = '\0';
 			if (ft_strchr(buffer, ' ') != NULL)
-				ft_printf("'%s' ", buffer);
+				ft_printf("'%s'", buffer);
 			else
-				ft_printf("%s ", buffer);
+				ft_printf("%s", buffer);
 		}
 		else
 			ft_printf("?");

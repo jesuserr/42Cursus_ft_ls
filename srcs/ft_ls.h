@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 17:55:40 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/24 16:15:01 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,22 @@ typedef struct s_entry_data
 	struct stat		stat_buf;		// stat struct to hold file metadata
 }	t_entry_data;
 
+typedef struct s_widths
+{
+	uint8_t		size_w;				// max width for file size field
+	uint8_t		nlink_w;			// max width for number of links field
+	uint8_t		user_w;				// max width for user name field
+	uint8_t		group_w;			// max width for group name field
+	int64_t		largest_size;		// largest file size in the list
+	uint64_t	largest_nlink;		// largest number of hard links in the list
+}	t_widths;
+
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
-/********************************** list_files.c ******************************/
-void		list_files(t_args *args, const char *current_path);
+/********************************** list_routines.c ***************************/
+void		list_files(t_args *args, t_list *entries_list, t_widths *widths);
 char		*build_full_path(const char *curr_pth, const struct dirent *entry);
 void		list_dirs(t_args *args, const char *current_path);
 
@@ -96,7 +106,14 @@ void		print_file_name(t_entry_data *entry_data, const char *current_path, \
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
 
 /********************************** print_long_format.c ***********************/
-void		print_long_line(t_entry_data *entry_data, const char *current_path);
+void		print_long_line(t_entry_data *entry_data, const char *current_path, \
+			t_widths *widths);
 void		print_long_format(t_list *entries_list, const char *current_path);
+
+/********************************** print_long_utils.c ************************/
+void		print_size_t_as_digits(uint64_t nbr);
+uint8_t		count_number_digits(uint64_t number);
+void		print_blank_spaces(uint8_t spaces);
+t_widths	*calculate_fields_widths(t_list *entries_list);
 
 #endif
