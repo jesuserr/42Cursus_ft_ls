@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 10:46:26 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ typedef int	(*t_compare_func)(const void *a, const void *b, bool reverse);
 typedef struct s_args
 {
 	bool		all;				// option -a
+	bool		hide_owner;			// option -g
 	bool		long_listing;		// option -l
+	bool		hide_group;			// option -o
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
 	bool		sort_by_time;		// option -t
@@ -104,19 +106,20 @@ void		sort_list(t_list **list, t_compare_func compare, bool reverse);
 void		parse_arguments(char **argv, t_args *args);
 
 /********************************** print_list.c ******************************/
-void		print_file_name(t_entry_data *entry_data, const char *current_path, \
-			bool long_format);
+void		print_file_name(t_args *args, t_entry_data *entry_data, \
+			const char *current_path);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);
 
 /********************************** print_long_format.c ***********************/
-void		print_long_line(t_entry_data *entry_data, const char *current_path, \
-			t_widths *widths);
-void		print_long_format(t_list *entries_list, const char *current_path);
+void		print_long_line(t_args *args, t_entry_data *entry_data, \
+			const char *current_path, t_widths *widths);
+void		print_long_format(t_args *args, t_list *entries_list, \
+			const char *current_path);
 
 /********************************** print_long_utils.c ************************/
 void		print_size_t_as_digits(uint64_t nbr);
 uint8_t		count_number_digits(uint64_t number);
-void		print_blank_spaces(uint8_t spaces);
-t_widths	*calculate_fields_widths(t_list *entries_list);
+void		print_blanks(uint8_t spaces);
+t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list);
 
 #endif

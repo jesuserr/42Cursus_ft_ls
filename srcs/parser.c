@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 10:48:42 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:31:14 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static void	print_usage(void)
 		"Options:\n"
 		"  --help                  display this help and exit\n"
 		"  -a                      do not ignore entries starting with .\n"
+		"  -g                      like -l, but do not list owner\n"
 		"  -l                      use a long listing format\n"
+		"  -o                      like -l, but do not list group information\n"
 		"  -r                      reverse order while sorting\n"
 		"  -R                      list subdirectories recursively\n"
 		"  -t                      sort by time, newest first\n");
@@ -95,8 +97,12 @@ void	parse_arguments(char **argv, t_args *args)
 			{
 				if (argv[i][j] == 'a')
 					args->all = true;
+				else if (argv[i][j] == 'g')
+					args->hide_owner = true;
 				else if (argv[i][j] == 'l')
 					args->long_listing = true;
+				else if (argv[i][j] == 'o')
+					args->hide_group = true;
 				else if (argv[i][j] == 'r')
 					args->reverse = true;
 				else if (argv[i][j] == 'R')
@@ -115,4 +121,6 @@ void	parse_arguments(char **argv, t_args *args)
 	if (!no_such_file && !args->cli_dirs_list && !args->cli_files_list)
 		ft_lstadd_back(&args->cli_dirs_list, ft_lstnew(ft_strdup(".")));
 	args->first_printing = true;
+	if (args->hide_group || args->hide_owner)
+		args->long_listing = true;
 }

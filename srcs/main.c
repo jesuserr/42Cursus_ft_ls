@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 10:41:30 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:45:48 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	files_listing(t_args *args)
 	}
 	widths = NULL;
 	if (args->long_listing)
-		widths = calculate_fields_widths(entries_list);
+		widths = calculate_fields_widths(args, entries_list);
 	list_files(args, entries_list, widths);
 	if (args->long_listing && widths)
 		free(widths);

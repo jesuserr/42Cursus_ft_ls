@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/24 16:58:29 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_size_t_as_digits(uint64_t nbr)
 
 	if (nbr == 0)
 	{
-		ft_printf("0");
+		ft_printf("0 ");
 		return ;
 	}
 	i = 0;
@@ -46,6 +46,7 @@ void	print_size_t_as_digits(uint64_t nbr)
 		ft_printf("%d", digits[i++]);
 		leading_zero = false;
 	}
+	ft_printf(" ");
 }
 
 // Counts the number of digits in a 64-bit unsigned integer. Returns the count
@@ -68,7 +69,7 @@ uint8_t	count_number_digits(uint64_t number)
 
 // Prints 'spaces' number of blank spaces to align the output in the long
 // listing format.
-void	print_blank_spaces(uint8_t spaces)
+void	print_blanks(uint8_t spaces)
 {
 	for (uint8_t i = 0; i < spaces; i++)
 		ft_printf(" ");
@@ -78,7 +79,7 @@ void	print_blank_spaces(uint8_t spaces)
 // one of the following fields (file size, number of links, user name and group
 // name). Returns a pointer to an allocated t_widths structure containing the
 // maximum width for each field.
-t_widths	*calculate_fields_widths(t_list *entries_list)
+t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 {
 	t_widths		*field_widths;
 	t_entry_data	*entry_data;
@@ -96,12 +97,18 @@ t_widths	*calculate_fields_widths(t_list *entries_list)
 			field_widths->largest_size = entry_data->stat_buf.st_size;
 		if (entry_data->stat_buf.st_nlink > field_widths->largest_nlink)
 			field_widths->largest_nlink = entry_data->stat_buf.st_nlink;
-		user_info = getpwuid(entry_data->stat_buf.st_uid);
-		group_info = getgrgid(entry_data->stat_buf.st_gid);
-		if (user_info && (ft_strlen(user_info->pw_name) > field_widths->user_w))
-			field_widths->user_w = ft_strlen(user_info->pw_name);
-		if (group_info && (ft_strlen(group_info->gr_name) > field_widths->group_w))
-			field_widths->group_w = ft_strlen(group_info->gr_name);
+		if (!args->hide_owner)
+		{
+			user_info = getpwuid(entry_data->stat_buf.st_uid);
+			if (user_info && (ft_strlen(user_info->pw_name) > field_widths->user_w))
+				field_widths->user_w = ft_strlen(user_info->pw_name);
+		}
+		if (!args->hide_group)
+		{
+			group_info = getgrgid(entry_data->stat_buf.st_gid);		
+			if (group_info && (ft_strlen(group_info->gr_name) > field_widths->group_w))
+				field_widths->group_w = ft_strlen(group_info->gr_name);
+		}
 		list = list->next;
 	}
 	field_widths->size_w = count_number_digits(field_widths->largest_size);

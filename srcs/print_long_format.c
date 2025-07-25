@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/24 17:00:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,39 +102,43 @@ static void	print_file_permissions(mode_t mode)
 
 // Prints the long listing format for a single file entry.
 // The Linux Programming Interface - Chapter 15
-void	print_long_line(t_entry_data *entry_data, const char *current_path, \
-t_widths *widths)
+void	print_long_line(t_args *args, t_entry_data *entry_data, \
+const char *current_path, t_widths *widths)
 {
 	struct passwd	*user_info;
 	struct group	*group_info;
 	char			*formatted_time;
-	bool			long_format;
 
-	long_format = true;
 	print_file_permissions(entry_data->stat_buf.st_mode);
-	print_blank_spaces(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
+	print_blanks(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
 	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
-	user_info = getpwuid(entry_data->stat_buf.st_uid);
-	group_info = getgrgid(entry_data->stat_buf.st_gid);
-	if (user_info)
+	if (!args->hide_owner)
 	{
-		ft_printf(" %s ", user_info->pw_name);
-		print_blank_spaces(widths->user_w - ft_strlen(user_info->pw_name));
+		user_info = getpwuid(entry_data->stat_buf.st_uid);
+		if (user_info)
+		{
+			ft_printf("%s ", user_info->pw_name);
+			print_blanks(widths->user_w - ft_strlen(user_info->pw_name));
+		}
+		else
+			ft_printf("%d ", entry_data->stat_buf.st_uid);
 	}
-	else
-		ft_printf(" %d ", entry_data->stat_buf.st_uid);
-	if (group_info)
+	if (!args->hide_group)
 	{
-		ft_printf("%s ", group_info->gr_name);
-		print_blank_spaces(widths->group_w - ft_strlen(group_info->gr_name));
+		group_info = getgrgid(entry_data->stat_buf.st_gid);
+		if (group_info)
+		{
+			ft_printf("%s ", group_info->gr_name);
+			print_blanks(widths->group_w - ft_strlen(group_info->gr_name));
+		}
+		else
+			ft_printf("%d ", entry_data->stat_buf.st_gid);
 	}
-	else
-		ft_printf("%d ", entry_data->stat_buf.st_gid);
-	print_blank_spaces(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
+	print_blanks(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
 	print_size_t_as_digits(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
-	ft_printf(" %s ", formatted_time);
-	print_file_name(entry_data, current_path, long_format);
+	ft_printf("%s ", formatted_time);
+	print_file_name(args, entry_data, current_path);
 	ft_printf("\n");
 	free(formatted_time);
 }
@@ -143,17 +147,17 @@ t_widths *widths)
 // header, calculates maximum column widths and then iterates through entries
 // printing each file's detailed information via print_long_line().
 // Frees allocated width structure.
-void	print_long_format(t_list *entries_list, const char *current_path)
+void	print_long_format(t_args *args, t_list *entries_list, const char *current_path)
 {
 	t_entry_data	*entry_data;
 	t_widths		*widths;
 
 	ft_printf("total %d\n", calculate_total_blocks(entries_list));
-	widths = calculate_fields_widths(entries_list);
+	widths = calculate_fields_widths(args, entries_list);
 	while (entries_list)
 	{
 		entry_data = (t_entry_data *)entries_list->content;
-		print_long_line(entry_data, current_path, widths);
+		print_long_line(args, entry_data, current_path, widths);
 		entries_list = entries_list->next;
 	}
 	free(widths);

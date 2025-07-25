@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 10:48:30 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 12:07:15 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 		entry_data = (t_entry_data *)list->content;
 		current_path = entry_data->entry.d_name;
 		if (args->long_listing)
-			print_long_line(entry_data, current_path, widths);
+			print_long_line(args, entry_data, current_path, widths);
 		else
-			print_file_name(entry_data, current_path, args->long_listing);
+			print_file_name(args, entry_data, current_path);
 		args->first_printing = false;
 		list = list->next;
 		if (!list && !args->long_listing)
