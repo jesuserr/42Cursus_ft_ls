@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/23 17:41:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:48:42 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	print_invalid_option_and_exit(const char option, t_args *args)
 	ft_putstr_fd("'\n", STDERR_FILENO);
 	ft_putstr_fd("Try 'ft_ls --help' for more information.\n", STDERR_FILENO);
 	free_allocated_memory(args);
-	exit (EXIT_FAILURE);
+	exit (EXIT_SERIOUS_ERROR);
 }
 
 static void	print_usage(void)
@@ -57,6 +57,7 @@ static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 	{
 		ft_printf("ft_ls: cannot access '%s': ", entity);
 		perror("");
+		args->exit_status = EXIT_SERIOUS_ERROR;
 		*no_such_file = true;
 	}
 }

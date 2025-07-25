@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/24 16:15:01 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:46:26 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define CTIME_SIZE				26	// size of ctime string, including '\0'
 # define SKIP_DAY				4	// characters to skip day in ctime string
 # define PERMISSIONS_SIZE		11	// size permissions string, including '\0'
+# define EXIT_MINOR_ERROR		1	// exit status for minor problems
+# define EXIT_SERIOUS_ERROR		2	// exit status for serious troubles
 
 // Function pointer type for comparison functions. Creates a type called
 // t_compare_func that points to a function that takes two const void pointers
@@ -58,6 +60,7 @@ typedef struct s_args
 	t_list		*cli_files_list;	// linked list of files to 'ls'
 	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
 	bool		first_printing;		// used to not print "\n" the first time
+	uint8_t		exit_status;		// exit status of the program
 }	t_args;
 
 typedef struct s_entry_data

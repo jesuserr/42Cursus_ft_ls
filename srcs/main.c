@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/24 16:46:53 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 10:41:30 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ int	main(int argc, char **argv)
 	files_listing(&args);
 	dirs_listing(&args);
 	free_allocated_memory(&args);
-	return (EXIT_SUCCESS);
+	return (args.exit_status);
 }
