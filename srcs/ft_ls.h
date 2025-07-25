@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/25 22:45:55 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef int	(*t_compare_func)(const void *a, const void *b, bool reverse);
 typedef struct s_args
 {
 	bool		all;				// option -a
+	bool		almost_all;			// option -A
 	bool		hide_owner;			// option -g
 	bool		long_listing;		// option -l
 	bool		hide_group;			// option -o

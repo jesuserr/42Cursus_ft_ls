@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:07:15 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/26 00:29:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 	}
 }
 
+// Determines if file/directory entry should be skipped based on flags:
+// -a shows all, -A shows all except "." and "..", default hides dotfiles.
+bool	skip_entry(t_args *args, struct dirent *entry)
+{
+	if (args->all)
+		return (false);
+	else if (args->almost_all)
+	{
+		if (ft_strcmp(entry->d_name, ".") == 0 || \
+		ft_strcmp(entry->d_name, "..") == 0)
+			return (true);
+		return (false);
+	}
+	if (entry->d_name[0] == '.')
+		return (true);
+	return (false);
+}
+
 // Build full path for a file or directory entry. Used for lstat and recursive
 // calls to list_dirs(). It allocates enough memory for the full path, including
 // the null terminator. It also ensures that there is a '/' between the current
@@ -55,22 +73,6 @@ char	*build_full_path(const char *current_path, const struct dirent *entry)
 		ft_strlcat(full_path, "/", path_len + entry_d_name_len + 2);
 	ft_strlcat(full_path, entry->d_name, path_len + entry_d_name_len + 2);
 	return (full_path);
-}
-
-// Copies the contents of a dirent struct to another dirent struct.
-// A simple ft_memcpy would not work since struct dirent is a variable-length
-// structure where d_name is the last field and its actual size depends on the
-// filename length. Using sizeof(struct dirent) copies beyond the allocated
-// memory for that specific entry, causing invalid reads.
-// Doing ft_memcpy(&new_entry_data->entry, entry, sizeof(struct dirent)) was
-// making valgrind complain.
-static void	copy_dirent_struct(struct dirent *dest, const struct dirent *src)
-{
-	dest->d_ino = src->d_ino;
-	dest->d_off = src->d_off;
-	dest->d_reclen = src->d_reclen;
-	dest->d_type = src->d_type;
-	ft_strlcpy(dest->d_name, src->d_name, sizeof(dest->d_name));
 }
 
 // Processes subdirectories for recursive listing. Sorts the subdirectory list
@@ -128,7 +130,7 @@ void	list_dirs(t_args *args, const char *current_path)
 	entry = readdir(directory);
 	while (entry)
 	{
-		if (entry->d_name[0] == '.' && !args->all)
+		if (skip_entry(args, entry))
 		{
 			entry = readdir(directory);
 			continue ;
@@ -136,7 +138,8 @@ void	list_dirs(t_args *args, const char *current_path)
 		new_entry_data = malloc(sizeof(t_entry_data));
 		full_path = build_full_path(current_path, entry);
 		lstat(full_path, &new_entry_data->stat_buf);
-		copy_dirent_struct(&new_entry_data->entry, entry);
+		ft_strlcpy(new_entry_data->entry.d_name, entry->d_name, \
+		sizeof(new_entry_data->entry.d_name));
 		ft_lstadd_back(&entries_list, ft_lstnew(new_entry_data));
 		if (entry->d_type == DT_DIR && ft_strcmp(entry->d_name, ".") != 0 && \
 		ft_strcmp(entry->d_name, "..") != 0 && args->recursive)

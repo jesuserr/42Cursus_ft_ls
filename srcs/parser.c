@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:31:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/26 00:00:56 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	print_usage(void)
 		"Options:\n"
 		"  --help                  display this help and exit\n"
 		"  -a                      do not ignore entries starting with .\n"
+		"  -A                      do not list implied . and ..\n"
 		"  -g                      like -l, but do not list owner\n"
 		"  -l                      use a long listing format\n"
 		"  -o                      like -l, but do not list group information\n"
@@ -96,7 +97,15 @@ void	parse_arguments(char **argv, t_args *args)
 			for (uint8_t j = 1; argv[i][j]; j++)
 			{
 				if (argv[i][j] == 'a')
+				{
 					args->all = true;
+					args->almost_all = false;
+				}
+				else if (argv[i][j] == 'A')
+				{
+					args->almost_all = true;
+					args->all = false;
+				}
 				else if (argv[i][j] == 'g')
 					args->hide_owner = true;
 				else if (argv[i][j] == 'l')
