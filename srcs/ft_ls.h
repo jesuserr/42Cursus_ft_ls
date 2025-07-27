@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/26 13:43:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 12:29:02 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_args
 	bool		hide_group;			// option -o
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
+	bool		sort_by_size;		// option -S
 	bool		sort_by_time;		// option -t
 	bool		one_file_per_line;	// option -1
 	t_list		*cli_files_list;	// linked list of files to 'ls'
@@ -100,6 +101,7 @@ int			compare_names_cli(const void *a, const void *b, bool reverse);
 int			compare_times_cli(const void *a, const void *b, bool reverse);
 int			compare_d_names(const void *a, const void *b, bool reverse);
 int			compare_stat_times(const void *a, const void *b, bool reverse);
+int			compare_stat_sizes(const void *a, const void *b, bool reverse);
 
 /********************************** merge_sort.c ******************************/
 void		sort_list(t_list **list, t_compare_func compare, bool reverse);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:17:13 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/20 20:52:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 12:35:06 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,27 @@ int	compare_stat_times(const void *a, const void *b, bool reverse)
 	if (entry_a->stat_buf.st_mtim.tv_nsec > entry_b->stat_buf.st_mtim.tv_nsec)
 		return (1 * result);
 	if (entry_a->stat_buf.st_mtim.tv_nsec < entry_b->stat_buf.st_mtim.tv_nsec)
+		return (-1 * result);
+	return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name) * result);
+}
+
+// Comparison function to sort the list of directory entries by their st_size.
+// Size of the file is used to sort the entries.
+// If the sizes are the same, the names are compared to ensure a stable sort.
+int	compare_stat_sizes(const void *a, const void *b, bool reverse)
+{
+	t_entry_data	*entry_a;
+	t_entry_data	*entry_b;
+	int8_t			result;
+
+	entry_a = (t_entry_data *)a;
+	entry_b = (t_entry_data *)b;
+	result = -1;
+	if (reverse)
+		result = 1;
+	if (entry_a->stat_buf.st_size > entry_b->stat_buf.st_size)
+		return (1 * result);
+	if (entry_a->stat_buf.st_size < entry_b->stat_buf.st_size)
 		return (-1 * result);
 	return (ft_strcmp(entry_b->entry.d_name, entry_a->entry.d_name) * result);
 }

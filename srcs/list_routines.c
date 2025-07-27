@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/26 00:29:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:00:38 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,23 @@ char	*build_full_path(const char *current_path, const struct dirent *entry)
 	return (full_path);
 }
 
+// Applies the appropriate sorting algorithm based on the user's options.
+// entries_list passed as a double pointer to allow modification of the list
+// in place.
+void	apply_sort_algorithm(t_args *args, t_list **entries_list)
+{
+	if (args->sort_by_time)
+		sort_list(entries_list, compare_stat_times, args->reverse);
+	else if (args->sort_by_size)
+		sort_list(entries_list, compare_stat_sizes, args->reverse);
+	else
+		sort_list(entries_list, compare_d_names, args->reverse);
+}
+
 // Processes subdirectories for recursive listing. Sorts the subdirectory list
-// by name or time, then recursively calls list_dirs() on each subdirectory
-// using their full paths. Properly manages memory by freeing paths and clearing
-// the subdirectories list after processing.
+// by name, time or size and then recursively calls list_dirs() on each
+// subdirectory using their full paths. Properly manages memory by freeing paths
+// and clearing the subdirectories list after processing.
 static void	process_subdirs(t_args *args, t_list *subdirs_list, \
 const char *current_path)
 {
@@ -86,10 +99,7 @@ const char *current_path)
 	char			*subdir_full_path;
 	struct dirent	*subdir_entry;
 
-	if (args->sort_by_time)
-		sort_list(&subdirs_list, compare_stat_times, args->reverse);
-	else
-		sort_list(&subdirs_list, compare_d_names, args->reverse);
+	apply_sort_algorithm(args, &subdirs_list);
 	current_subdir = subdirs_list;
 	while (current_subdir)
 	{
@@ -104,8 +114,8 @@ const char *current_path)
 
 // Recursively lists files and directories in the specified path. Opens the
 // directory, reads each entry, and stores them in a linked list along with
-// their stat information. Entries are sorted by name or modification time based
-// on arguments. After printing the current directory contents, it processes
+// their stat information. Entries are sorted by name, modification time or size
+// based on options. After printing the current directory contents, it processes
 // subdirectories recursively if the recursive flag is set. Memory is properly
 // cleaned up after processing.
 void	list_dirs(t_args *args, const char *current_path)
@@ -151,10 +161,7 @@ void	list_dirs(t_args *args, const char *current_path)
 		free(full_path);
 		entry = readdir(directory);
 	}
-	if (args->sort_by_time)
-		sort_list(&entries_list, compare_stat_times, args->reverse);
-	else
-		sort_list(&entries_list, compare_d_names, args->reverse);
+	apply_sort_algorithm(args, &entries_list);
 	print_list(args, entries_list, current_path);
 	if (subdirs_list)
 		process_subdirs(args, subdirs_list, current_path);
