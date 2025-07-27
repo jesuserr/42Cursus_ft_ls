@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 13:00:38 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:56:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 
 // Determines if file/directory entry should be skipped based on flags:
 // -a shows all, -A shows all except "." and "..", default hides dotfiles.
-bool	skip_entry(t_args *args, struct dirent *entry)
+static bool	skip_entry(t_args *args, struct dirent *entry)
 {
 	if (args->all)
 		return (false);
 	else if (args->almost_all)
 	{
-		if (ft_strcmp(entry->d_name, ".") == 0 || \
-		ft_strcmp(entry->d_name, "..") == 0)
+		if (ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0)
 			return (true);
 		return (false);
 	}
@@ -55,30 +54,10 @@ bool	skip_entry(t_args *args, struct dirent *entry)
 	return (false);
 }
 
-// Build full path for a file or directory entry. Used for lstat and recursive
-// calls to list_dirs(). It allocates enough memory for the full path, including
-// the null terminator. It also ensures that there is a '/' between the current
-// path and the entry name, unless the current path ends with '/'.
-char	*build_full_path(const char *current_path, const struct dirent *entry)
-{
-	char		*full_path;
-	uint64_t	path_len;
-	uint64_t	entry_d_name_len;
-
-	path_len = ft_strlen(current_path);
-	entry_d_name_len = ft_strlen(entry->d_name);
-	full_path = malloc(path_len + entry_d_name_len + 2);
-	ft_strlcpy(full_path, current_path, path_len + entry_d_name_len + 2);
-	if (path_len > 0 && current_path[path_len - 1] != '/')
-		ft_strlcat(full_path, "/", path_len + entry_d_name_len + 2);
-	ft_strlcat(full_path, entry->d_name, path_len + entry_d_name_len + 2);
-	return (full_path);
-}
-
 // Applies the appropriate sorting algorithm based on the user's options.
 // entries_list passed as a double pointer to allow modification of the list
 // in place.
-void	apply_sort_algorithm(t_args *args, t_list **entries_list)
+static void	apply_sort_algorithm(t_args *args, t_list **entries_list)
 {
 	if (args->sort_by_time)
 		sort_list(entries_list, compare_stat_times, args->reverse);

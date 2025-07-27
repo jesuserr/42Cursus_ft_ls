@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 12:29:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:52:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,15 @@ typedef int	(*t_compare_func)(const void *a, const void *b, bool reverse);
 typedef struct s_args
 {
 	bool		all;				// option -a
-	bool		almost_all;			// option -A
-	bool		hide_owner;			// option -g
+	bool		almost_all;			// option -A (bonus)
+	bool		hide_owner;			// option -g (bonus)
 	bool		long_listing;		// option -l
-	bool		hide_group;			// option -o
+	bool		hide_group;			// option -o (bonus)
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
-	bool		sort_by_size;		// option -S
+	bool		sort_by_size;		// option -S (bonus)
 	bool		sort_by_time;		// option -t
-	bool		one_file_per_line;	// option -1
+	bool		one_file_per_line;	// option -1 (bonus)
 	t_list		*cli_files_list;	// linked list of files to 'ls'
 	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
 	bool		first_printing;		// used to not print "\n" the first time
@@ -90,7 +90,6 @@ typedef struct s_widths
 */
 /********************************** list_routines.c ***************************/
 void		list_files(t_args *args, t_list *entries_list, t_widths *widths);
-char		*build_full_path(const char *curr_pth, const struct dirent *entry);
 void		list_dirs(t_args *args, const char *current_path);
 
 /********************************** main.c ************************************/
@@ -99,6 +98,7 @@ void		free_allocated_memory(t_args *args);
 /********************************** merge_sort_comp.c *************************/
 int			compare_names_cli(const void *a, const void *b, bool reverse);
 int			compare_times_cli(const void *a, const void *b, bool reverse);
+int			compare_sizes_cli(const void *a, const void *b, bool reverse);
 int			compare_d_names(const void *a, const void *b, bool reverse);
 int			compare_stat_times(const void *a, const void *b, bool reverse);
 int			compare_stat_sizes(const void *a, const void *b, bool reverse);
@@ -110,6 +110,7 @@ void		sort_list(t_list **list, t_compare_func compare, bool reverse);
 void		parse_arguments(char **argv, t_args *args);
 
 /********************************** print_list.c ******************************/
+char		*build_full_path(const char *curr_pth, const struct dirent *entry);
 void		print_file_name(t_args *args, t_entry_data *entry_data, \
 			const char *current_path);
 void		print_list(t_args *args, t_list *entries_lst, const char *curr_pth);

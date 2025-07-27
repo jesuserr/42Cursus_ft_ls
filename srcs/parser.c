@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 12:51:50 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:15:46 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,18 @@ static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 	}
 }
 
-static void	sort_lists(t_args *args)
+static void	sort_cli_lists(t_args *args)
 {
 	if (args->cli_files_list && args->sort_by_time)
 		sort_list(&args->cli_files_list, compare_times_cli, args->reverse);
+	else if (args->cli_files_list && args->sort_by_size)
+		sort_list(&args->cli_files_list, compare_sizes_cli, args->reverse);
 	else if (args->cli_files_list)
 		sort_list(&args->cli_files_list, compare_names_cli, args->reverse);
 	if (args->cli_dirs_list && args->sort_by_time)
 		sort_list(&args->cli_dirs_list, compare_times_cli, args->reverse);
+	else if (args->cli_dirs_list && args->sort_by_size)
+		sort_list(&args->cli_dirs_list, compare_sizes_cli, args->reverse);
 	else if (args->cli_dirs_list)
 		sort_list(&args->cli_dirs_list, compare_names_cli, args->reverse);
 }
@@ -138,7 +142,7 @@ void	parse_arguments(char **argv, t_args *args)
 			add_entity_to_list(argv[i], args, &no_such_file);
 	}
 	if (args->cli_dirs_list || args->cli_files_list)
-		sort_lists(args);
+		sort_cli_lists(args);
 	if (!no_such_file && !args->cli_dirs_list && !args->cli_files_list)
 		ft_lstadd_back(&args->cli_dirs_list, ft_lstnew(ft_strdup(".")));
 	args->first_printing = true;

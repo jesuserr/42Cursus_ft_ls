@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:17:13 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 12:35:06 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:59:16 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,28 @@ int	compare_times_cli(const void *a, const void *b, bool reverse)
 	if (stat_a.st_mtim.tv_nsec > stat_b.st_mtim.tv_nsec)
 		return (1 * result);
 	if (stat_a.st_mtim.tv_nsec < stat_b.st_mtim.tv_nsec)
+		return (-1 * result);
+	return (ft_strcmp((char *)b, (char *)a) * result);
+}
+
+// Comparison function to sort the list of command line arguments by their size.
+// List is contained either in args->cli_dirs_list or in args->cli_files_list.
+// In that case *content of the list nodes is just a string (file/dir name).
+// lstat() is used to get the file's size from their names.
+int	compare_sizes_cli(const void *a, const void *b, bool reverse)
+{
+	struct stat	stat_a;
+	struct stat	stat_b;
+	int8_t		result;
+
+	result = -1;
+	if (reverse)
+		result = 1;
+	lstat((char *)a, &stat_a);
+	lstat((char *)b, &stat_b);
+	if (stat_a.st_size > stat_b.st_size)
+		return (1 * result);
+	if (stat_a.st_size < stat_b.st_size)
 		return (-1 * result);
 	return (ft_strcmp((char *)b, (char *)a) * result);
 }
