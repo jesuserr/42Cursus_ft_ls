@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:15:25 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 11:36:42 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ const char *current_path)
 		ft_printf("'%s'", file_name);
 	else
 		ft_printf("%s", file_name);
-	if (!args->long_listing)
+	if (!args->long_listing && !args->one_file_per_line)
 		ft_printf("  ");
 	if (S_ISLNK(entry_data->stat_buf.st_mode) && args->long_listing)
 	{
@@ -52,10 +52,10 @@ const char *current_path)
 }
 
 // Prints the complete listing of directory entries with appropriate formatting.
-// Handles directory headers when multiple directories are listed or recursion
-// is enabled. Wraps directory paths containing spaces in quotes. Delegates to
-// print_long_format for detailed listings (-l option) or iterates through
-// entries calling print_file_name for simple format, ending with newline.
+// Handles directory headers when multiple directories are listed, recursion is
+// enabled or an error occurred. Delegates to print_long_format for detailed
+// listings (-l option) or iterates through entries calling print_file_name for
+// simple format.
 void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 {
 	if (!args->first_printing)
@@ -63,7 +63,7 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 	else
 		args->first_printing = false;
 	if (ft_lstsize(args->cli_dirs_list) > 1 || args->recursive || \
-	(args->cli_dirs_list && args->cli_files_list))
+	(args->cli_dirs_list && args->cli_files_list) || args->exit_status != 0)
 	{
 		if (ft_strchr(current_path, ' ') != NULL)
 			ft_printf("'%s':\n", current_path);
@@ -78,6 +78,8 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 		{
 			print_file_name(args, (t_entry_data *)entries_list->content, current_path);
 			entries_list = entries_list->next;
+			if (args->one_file_per_line && entries_list)
+				ft_printf("\n");
 		}
 		ft_printf("\n");
 	}

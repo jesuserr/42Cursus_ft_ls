@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 22:45:55 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/26 13:43:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_args
 	bool		reverse;			// option -r
 	bool		recursive;			// option -R
 	bool		sort_by_time;		// option -t
+	bool		one_file_per_line;	// option -1
 	t_list		*cli_files_list;	// linked list of files to 'ls'
 	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
 	bool		first_printing;		// used to not print "\n" the first time

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/26 00:00:56 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/27 11:14:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	print_usage(void)
 		"  -o                      like -l, but do not list group information\n"
 		"  -r                      reverse order while sorting\n"
 		"  -R                      list subdirectories recursively\n"
-		"  -t                      sort by time, newest first\n");
+		"  -t                      sort by time, newest first\n"
+		"  -1                      list one file per line\n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -118,6 +119,8 @@ void	parse_arguments(char **argv, t_args *args)
 					args->recursive = true;
 				else if (argv[i][j] == 't')
 					args->sort_by_time = true;
+				else if (argv[i][j] == '1')
+					args->one_file_per_line = true;
 				else
 					print_invalid_option_and_exit(argv[i][j], args);
 			}
