@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 14:57:20 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:09:18 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ static void	dirs_listing(t_args *args)
 	}
 }
 
-// Frees the memory allocated during program execution.
+// Flushes printf buffer and frees memory allocated during program execution.
 void	free_allocated_memory(t_args *args)
 {
+	ft_printf_flush();
 	if (args->cli_files_list)
 		ft_lstclear(&args->cli_files_list, free);
 	if (args->cli_dirs_list)

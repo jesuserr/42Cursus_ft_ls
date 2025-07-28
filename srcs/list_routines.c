@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 14:56:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 12:53:29 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	list_dirs(t_args *args, const char *current_path)
 	if (directory == NULL)
 	{
 		ft_printf("ft_ls: cannot open directory '%s': ", current_path);
+		ft_printf_flush();
 		perror("");
 		if (args->exit_status != EXIT_SERIOUS_ERROR)
 			args->exit_status = EXIT_MINOR_ERROR;

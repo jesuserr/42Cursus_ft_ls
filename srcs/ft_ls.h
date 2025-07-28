@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 14:52:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:13:14 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 */
 # include "../libft/includes/libft.h"
 # include "../libft/includes/get_next_line.h"
-# include "../libft/includes/ft_printf.h"
 # include <dirent.h>				// for opendir, readdir, closedir
 # include <sys/stat.h>				// for stat, lstat
 # include <stdbool.h>				// for booleans
@@ -27,6 +26,7 @@
 # include <time.h>					// for ctime, time
 # include <pwd.h>					// for getpwuid struct
 # include <grp.h>					// for getgrgid struct
+# include <stdarg.h>				// for va_list, va_start, va_end
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -38,6 +38,7 @@
 # define PERMISSIONS_SIZE		11	// size permissions string, including '\0'
 # define EXIT_MINOR_ERROR		1	// exit status for minor problems
 # define EXIT_SERIOUS_ERROR		2	// exit status for serious troubles
+# define BUFFER_SIZE_PRINTF		8192	// size of the ft_printf print buffer
 
 // Function pointer type for comparison functions. Creates a type called
 // t_compare_func that points to a function that takes two const void pointers
@@ -122,9 +123,12 @@ void		print_long_format(t_args *args, t_list *entries_list, \
 			const char *current_path);
 
 /********************************** print_long_utils.c ************************/
-void		print_size_t_as_digits(uint64_t nbr);
 uint8_t		count_number_digits(uint64_t number);
 void		print_blanks(uint8_t spaces);
 t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list);
+
+/********************************** print_printf.c ***************************/
+void		ft_printf(char const *hold, ...);
+void		ft_printf_flush(void);
 
 #endif

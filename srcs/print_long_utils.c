@@ -6,48 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:15:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-// Function needed because my ft_printf does not support 'size_t' printing.
-// It is assumed that 'nbr' will be 64-bit unsigned integer and therefore, 20
-// digits will be enough to represent its maximum value.
-void	print_size_t_as_digits(uint64_t nbr)
-{
-	uint8_t	digits[20];
-	uint8_t	i;
-	bool	leading_zero;
-
-	if (nbr == 0)
-	{
-		ft_printf("0 ");
-		return ;
-	}
-	i = 0;
-	while (i < 20)
-		digits[i++] = 0;
-	i = 19;
-	digits [i--] = nbr % 10;
-	nbr = nbr / 10;
-	while (nbr >= 10)
-	{
-		digits[i--] = nbr % 10;
-		nbr = nbr / 10;
-	}
-	digits[i--] = (int)nbr;
-	leading_zero = true;
-	while (i < 20)
-	{
-		while (digits[i] == 0 && leading_zero)
-			i++;
-		ft_printf("%d", digits[i++]);
-		leading_zero = false;
-	}
-	ft_printf(" ");
-}
 
 // Counts the number of digits in a 64-bit unsigned integer. Returns the count
 // as an 8-bit unsigned integer. Used to determine the width of the file size
@@ -105,7 +68,7 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 		}
 		if (!args->hide_group)
 		{
-			group_info = getgrgid(entry_data->stat_buf.st_gid);		
+			group_info = getgrgid(entry_data->stat_buf.st_gid);
 			if (group_info && (ft_strlen(group_info->gr_name) > field_widths->group_w))
 				field_widths->group_w = ft_strlen(group_info->gr_name);
 		}

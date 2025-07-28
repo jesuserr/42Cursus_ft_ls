@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/25 12:18:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:11:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ const char *current_path, t_widths *widths)
 
 	print_file_permissions(entry_data->stat_buf.st_mode);
 	print_blanks(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
-	print_size_t_as_digits(entry_data->stat_buf.st_nlink);
+	ft_printf("%d ", entry_data->stat_buf.st_nlink);
 	if (!args->hide_owner)
 	{
 		user_info = getpwuid(entry_data->stat_buf.st_uid);
@@ -135,7 +135,7 @@ const char *current_path, t_widths *widths)
 			ft_printf("%d ", entry_data->stat_buf.st_gid);
 	}
 	print_blanks(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
-	print_size_t_as_digits(entry_data->stat_buf.st_size);
+	ft_printf("%d ", entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
 	ft_printf("%s ", formatted_time);
 	print_file_name(args, entry_data, current_path);
