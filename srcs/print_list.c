@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/27 14:52:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 15:59:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ const char *current_path)
 		ft_printf(" -> ");
 		full_path = build_full_path(current_path, &entry_data->entry);
 		read_bytes = readlink(full_path, buffer, sizeof(buffer) - 1);
+		if (read_bytes == -1)
+			read_bytes = readlink(file_name, buffer, sizeof(buffer) - 1);
 		if (read_bytes != -1)
 		{
 			buffer[read_bytes] = '\0';
