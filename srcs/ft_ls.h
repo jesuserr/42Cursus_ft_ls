@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 13:13:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 17:23:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,16 @@
 # define EXIT_MINOR_ERROR		1	// exit status for minor problems
 # define EXIT_SERIOUS_ERROR		2	// exit status for serious troubles
 # define BUFFER_SIZE_PRINTF		8192	// size of the ft_printf print buffer
+# define COLOR_RESET			"\033[0m"		// reset color to default
+# define COLOR_DIRECTORY		"\033[01;34m"	// bold blue
+# define COLOR_SYMLINK			"\033[01;36m"	// bold cyan
+# define COLOR_EXECUTABLE		"\033[01;32m"	// bold green
+# define COLOR_SOCKET			"\033[01;35m"	// bold magenta
+# define COLOR_NAMED_PIPE		"\033[40;33m"	// yellow on black
+# define COLOR_DEVICE			"\033[01;37m"	// bold white
+# define COLOR_STICKY_DIR		"\033[30;42m"	// black on green
+# define COLOR_SETGID_FILE		"\033[30;43m"	// black on yellow
+# define COLOR_SETUID_FILE		"\033[30;41m"	// black on red
 
 // Function pointer type for comparison functions. Creates a type called
 // t_compare_func that points to a function that takes two const void pointers

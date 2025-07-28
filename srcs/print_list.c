@@ -6,11 +6,42 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 15:59:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/28 21:12:04 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+// Returns appropriate ANSI color code based on file type and permissions.
+// Handles directories, special files, symbolic links, setuid/setgid,
+// executables and devices.
+static const char	*get_entity_color(t_entry_data *entry_data)
+{
+	mode_t	mode;
+
+	mode = entry_data->stat_buf.st_mode;
+	if (S_ISDIR(mode))
+	{
+		if (mode & S_ISVTX)
+			return (COLOR_STICKY_DIR);
+		return (COLOR_DIRECTORY);
+	}
+	if (S_ISSOCK(mode))
+		return (COLOR_SOCKET);
+	if (S_ISFIFO(mode))
+		return (COLOR_NAMED_PIPE);
+	if (S_ISLNK(mode))
+		return (COLOR_SYMLINK);
+	if (mode & S_ISUID)
+		return (COLOR_SETUID_FILE);
+	if (mode & S_ISGID)
+		return (COLOR_SETGID_FILE);
+	if (mode & S_IXUSR)
+		return (COLOR_EXECUTABLE);
+	if (S_ISBLK(mode) || S_ISCHR(mode))
+		return (COLOR_DEVICE);
+	return (COLOR_RESET);
+}
 
 // Build full path for a file or directory entry. Used for lstat and recursive
 // calls to list_dirs(). It allocates enough memory for the full path, including
@@ -40,16 +71,18 @@ char	*build_full_path(const char *current_path, const struct dirent *entry)
 void	print_file_name(t_args *args, t_entry_data *entry_data, \
 const char *current_path)
 {
-	char	*file_name;
-	char	*full_path;
-	char	buffer[PATH_MAX];
-	int64_t	read_bytes;
+	char		*file_name;
+	char		*full_path;
+	char		buffer[PATH_MAX];
+	int64_t		read_bytes;
+	const char	*color;
 
 	file_name = entry_data->entry.d_name;
+	color = get_entity_color(entry_data);
 	if (ft_strchr(file_name, ' ') != NULL)
-		ft_printf("'%s'", file_name);
+		ft_printf("%s'%s'%s", color, file_name, COLOR_RESET);
 	else
-		ft_printf("%s", file_name);
+		ft_printf("%s%s%s", color, file_name, COLOR_RESET);
 	if (!args->long_listing && !args->one_file_per_line)
 		ft_printf("  ");
 	if (S_ISLNK(entry_data->stat_buf.st_mode) && args->long_listing)
