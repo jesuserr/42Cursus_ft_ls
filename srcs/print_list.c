@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 21:12:04 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:57:10 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ const char *current_path)
 		ft_printf("%s'%s'%s", color, file_name, COLOR_RESET);
 	else
 		ft_printf("%s%s%s", color, file_name, COLOR_RESET);
-	if (!args->long_listing && !args->one_file_per_line)
-		ft_printf("  ");
 	if (S_ISLNK(entry_data->stat_buf.st_mode) && args->long_listing)
 	{
 		ft_printf(" -> ");
@@ -103,6 +101,57 @@ const char *current_path)
 		else
 			ft_printf("?");
 		free(full_path);
+	}
+}
+
+// Prints directory entries in a multi-column format based on terminal width.
+// Calculates optimal column layout using terminal size, longest filename and
+// number of entries. In case that terminal is smaller than the longest
+// filename (columns = 0, divide-by-zero!!) it will print only one column.
+// Using list traversal, it prints each file name with proper spacing and
+// alignment. Very proud of this function, it took some time to get it right,
+// specially the traversal logic through the linked list.
+static void	print_in_columns(t_args *args, t_list *entries_list)
+{
+	struct winsize	ws;
+	t_entry_data	*entry_data;
+	t_list			*list;
+	uint16_t		longest_name, columns, rows, entries;
+
+	longest_name = 0;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) != 0)
+		ws.ws_col = 80;
+	entries = ft_lstsize(entries_list);
+	list = entries_list;
+	while (list)
+	{
+		entry_data = (t_entry_data *)list->content;
+		if (ft_strlen(entry_data->entry.d_name) > longest_name)
+			longest_name = ft_strlen(entry_data->entry.d_name);
+		list = list->next;
+	}
+	longest_name += 2;
+	columns = ws.ws_col / longest_name;
+	if (columns == 0)
+		columns = 1;
+	rows = entries / columns;
+	if (entries % columns)
+		rows++;
+	list = entries_list;
+	for (uint32_t j = 0; j < rows && list; j++)
+	{
+		while (list)
+		{
+			entry_data = (t_entry_data *)list->content;
+			print_file_name(args, entry_data, NULL);
+			print_blanks(longest_name - ft_strlen(entry_data->entry.d_name));
+			for (uint32_t i = 0; i < rows && list; i++)
+				list = list->next;
+		}
+		list = entries_list;
+		for (uint32_t i = 0; i < j + 1 && list; i++)
+			list = list->next;
+		ft_printf("\n");
 	}
 }
 
@@ -127,15 +176,15 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 	}
 	if (args->long_listing)
 		print_long_format(args, entries_list, current_path);
-	else
+	else if (args->one_file_per_line)
 	{
 		while (entries_list)
 		{
 			print_file_name(args, (t_entry_data *)entries_list->content, current_path);
+			ft_printf("\n");
 			entries_list = entries_list->next;
-			if (args->one_file_per_line && entries_list)
-				ft_printf("\n");
 		}
-		ft_printf("\n");
 	}
+	else
+		print_in_columns(args, entries_list);
 }

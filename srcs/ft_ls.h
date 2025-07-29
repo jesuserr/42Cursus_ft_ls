@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 17:23:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:55:44 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <pwd.h>					// for getpwuid struct
 # include <grp.h>					// for getgrgid struct
 # include <stdarg.h>				// for va_list, va_start, va_end
+# include <sys/ioctl.h>				// for ioctl, TIOCGWINSZ (bonus)
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-

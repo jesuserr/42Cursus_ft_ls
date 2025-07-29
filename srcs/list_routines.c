@@ -6,14 +6,16 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 12:53:29 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/29 16:18:39 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
 // Traverses the linked list of files and prints each file entry in the
-// specified format (long or simple). Reminder, used for command-line file
+// specified format (long or simple). For regular printing (not long, not
+// one file per line), it prints all files in a single line, separated by
+// two spaces (not arranged in columns). Reminder -> used for command-line file
 // arguments, not directory contents.
 void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 {
@@ -29,7 +31,13 @@ void	list_files(t_args *args, t_list *entries_list, t_widths *widths)
 		if (args->long_listing)
 			print_long_line(args, entry_data, current_path, widths);
 		else
+		{
 			print_file_name(args, entry_data, current_path);
+			if (args->one_file_per_line && list->next)
+				ft_printf("\n");
+			else
+				ft_printf("  ");
+		}
 		args->first_printing = false;
 		list = list->next;
 		if (!list && !args->long_listing)
