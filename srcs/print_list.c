@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/30 09:39:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:41:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ const char *current_path)
 
 	file_name = entry_data->entry.d_name;
 	color = get_entity_color(entry_data);
-	if (ft_strchr(file_name, ' ') != NULL)
+	if (args->quoting && ft_strchr(file_name, ' ') != NULL)
 		ft_printf("%s'%s'%s", color, file_name, COLOR_RESET);
 	else
 		ft_printf("%s%s%s", color, file_name, COLOR_RESET);
@@ -93,7 +93,7 @@ const char *current_path)
 		if (read_bytes != -1)
 		{
 			buffer[read_bytes] = '\0';
-			if (ft_strchr(buffer, ' ') != NULL)
+			if (args->quoting && ft_strchr(buffer, ' ') != NULL)
 				ft_printf("'%s'", buffer);
 			else
 				ft_printf("%s", buffer);
@@ -172,7 +172,7 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 	if (ft_lstsize(args->cli_dirs_list) > 1 || args->recursive || \
 	(args->cli_dirs_list && args->cli_files_list) || args->exit_status != 0)
 	{
-		if (ft_strchr(current_path, ' ') != NULL)
+		if (args->quoting && ft_strchr(current_path, ' ') != NULL)
 			ft_printf("'%s':\n", current_path);
 		else
 			ft_printf("%s:\n", current_path);

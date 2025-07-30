@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/29 21:32:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:28:44 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_args
 	bool		almost_all;			// option -A (bonus)
 	bool		hide_owner;			// option -g (bonus)
 	bool		long_listing;		// option -l
+	bool		quoting;			// option -N (bonus - as 'ls' but reversed)
 	bool		hide_group;			// option -o (bonus)
 	bool		total_files;		// option -q (bonus - non-canonical option)
 	bool		reverse;			// option -r
