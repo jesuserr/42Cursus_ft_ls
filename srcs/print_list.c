@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/29 20:57:10 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/30 09:39:09 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,9 @@ static void	print_in_columns(t_args *args, t_list *entries_list)
 // simple format.
 void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 {
+	t_list	*list;
+
+	list = entries_list;
 	if (!args->first_printing)
 		ft_printf("\n");
 	else
@@ -187,4 +190,6 @@ void	print_list(t_args *args, t_list *entries_list, const char *current_path)
 	}
 	else
 		print_in_columns(args, entries_list);
+	if (args->total_files)
+		ft_printf("%d file(s)\n", ft_lstsize(list));
 }
