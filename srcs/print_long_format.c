@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 11:59:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:31:56 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static void	print_file_permissions(mode_t mode)
 	else
 		perms[9] = (mode & S_IXOTH) ? 'x' : '-';
 	perms[10] = '\0';
-	ft_printf("%s ", perms);
+	ft_printf("%s", perms);
 }
 
 // Prints the long listing format for a single file entry.
@@ -106,9 +106,19 @@ void	print_long_line(t_args *args, t_entry_data *entry_data, \
 const char *current_path, t_widths *widths)
 {
 	char	*formatted_time;
+	char	*full_path;
 
 	print_file_permissions(entry_data->stat_buf.st_mode);
-	print_blanks(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
+	if (args->acl_and_xattr)
+	{
+		full_path = build_full_path(current_path, &entry_data->entry);
+		if (listxattr(full_path, NULL, 0) > 0)
+			ft_printf("+");
+		else
+			ft_printf(" ");
+		free(full_path);
+	}
+	print_blanks(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink) + 1);
 	ft_printf("%d ", entry_data->stat_buf.st_nlink);
 	if (!args->hide_owner)
 	{

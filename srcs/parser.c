@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/30 16:29:34 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:08:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	print_usage(void)
 		"  -R                      list subdirectories recursively\n"
 		"  -S                      sort by file size, largest first\n"
 		"  -t                      sort by time, newest first\n"
+		"  -x                      list ACL and extended attributes\n"
 		"  -1                      list one file per line\n");
 	ft_printf_flush();
 	exit(EXIT_SUCCESS);
@@ -140,6 +141,8 @@ void	parse_arguments(char **argv, t_args *args)
 					args->sort_by_time = true;
 					args->sort_by_size = false;
 				}
+				else if (argv[i][j] == 'x')
+					args->acl_and_xattr = true;
 				else if (argv[i][j] == '1')
 					args->one_file_per_line = true;
 				else

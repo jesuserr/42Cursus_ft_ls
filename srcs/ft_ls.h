@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 17:05:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:41:24 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdarg.h>				// for va_list, va_start, va_end
 # include <sys/ioctl.h>				// for ioctl, TIOCGWINSZ (bonus)
 # include <stdio.h>					// for perror
+# include <sys/xattr.h>				// for listxattr (ACL and xattr) (bonus)
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -91,6 +92,7 @@ typedef struct s_args
 	bool		recursive;			// option -R
 	bool		sort_by_size;		// option -S (bonus)
 	bool		sort_by_time;		// option -t
+	bool		acl_and_xattr;		// option -x (bonus - non-canonical option)
 	bool		one_file_per_line;	// option -1 (bonus)
 	t_list		*cli_files_list;	// linked list of files to 'ls'
 	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
