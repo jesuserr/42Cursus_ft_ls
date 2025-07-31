@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 12:10:52 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:55:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ static void	files_listing(t_args *args)
 	{
 		entry_data = malloc(sizeof(t_entry_data));
 		filename = (char *)list->content;
-		lstat(filename, &entry_data->stat_buf);
+		if (lstat(filename, &entry_data->stat_buf) != 0)
+		{
+			free(entry_data);
+			list = list->next;
+			continue ;
+		}
 		ft_strlcpy(entry_data->entry.d_name, filename, sizeof(entry_data->entry.d_name));
 		ft_lstadd_back(&entries_list, ft_lstnew(entry_data));
 		list = list->next;

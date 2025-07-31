@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/29 16:18:39 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:58:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,13 @@ void	list_dirs(t_args *args, const char *current_path)
 		}
 		new_entry_data = malloc(sizeof(t_entry_data));
 		full_path = build_full_path(current_path, entry);
-		lstat(full_path, &new_entry_data->stat_buf);
+		if (lstat(full_path, &new_entry_data->stat_buf) != 0)
+		{
+			free(new_entry_data);
+			free(full_path);
+			entry = readdir(directory);
+			continue ;
+		}
 		ft_strlcpy(new_entry_data->entry.d_name, entry->d_name, \
 		sizeof(new_entry_data->entry.d_name));
 		ft_lstadd_back(&entries_list, ft_lstnew(new_entry_data));
