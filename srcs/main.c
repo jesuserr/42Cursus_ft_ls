@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 13:55:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:54:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static void	files_listing(t_args *args)
 		filename = (char *)list->content;
 		if (lstat(filename, &entry_data->stat_buf) != 0)
 		{
+			if (args->exit_status != EXIT_SERIOUS_ERROR)
+				args->exit_status = EXIT_MINOR_ERROR;
 			free(entry_data);
 			list = list->next;
 			continue ;

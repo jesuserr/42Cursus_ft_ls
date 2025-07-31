@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 12:41:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 17:05:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 */
 
 # include "../libft/includes/libft.h"
-# include "../libft/includes/get_next_line.h"
 # include <dirent.h>				// for opendir, readdir, closedir
 # include <sys/stat.h>				// for stat, lstat
 # include <stdbool.h>				// for booleans
@@ -29,6 +28,7 @@
 # include <grp.h>					// for getgrgid struct
 # include <stdarg.h>				// for va_list, va_start, va_end
 # include <sys/ioctl.h>				// for ioctl, TIOCGWINSZ (bonus)
+# include <stdio.h>					// for perror
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-

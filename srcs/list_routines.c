@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 13:58:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:55:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ void	list_dirs(t_args *args, const char *current_path)
 		full_path = build_full_path(current_path, entry);
 		if (lstat(full_path, &new_entry_data->stat_buf) != 0)
 		{
+			if (args->exit_status != EXIT_SERIOUS_ERROR)
+				args->exit_status = EXIT_MINOR_ERROR;
 			free(new_entry_data);
 			free(full_path);
 			entry = readdir(directory);
