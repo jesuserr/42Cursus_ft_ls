@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 13:11:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 11:59:14 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,31 +105,29 @@ static void	print_file_permissions(mode_t mode)
 void	print_long_line(t_args *args, t_entry_data *entry_data, \
 const char *current_path, t_widths *widths)
 {
-	struct passwd	*user_info;
-	struct group	*group_info;
-	char			*formatted_time;
+	char	*formatted_time;
 
 	print_file_permissions(entry_data->stat_buf.st_mode);
 	print_blanks(widths->nlink_w - count_number_digits(entry_data->stat_buf.st_nlink));
 	ft_printf("%d ", entry_data->stat_buf.st_nlink);
 	if (!args->hide_owner)
 	{
-		user_info = getpwuid(entry_data->stat_buf.st_uid);
-		if (user_info)
+		check_cached_user_name(args, entry_data);
+		if (args->id_cache.last_user_name)
 		{
-			ft_printf("%s ", user_info->pw_name);
-			print_blanks(widths->user_w - ft_strlen(user_info->pw_name));
+			ft_printf("%s ", args->id_cache.last_user_name);
+			print_blanks(widths->user_w - ft_strlen(args->id_cache.last_user_name));
 		}
 		else
 			ft_printf("%d ", entry_data->stat_buf.st_uid);
 	}
 	if (!args->hide_group)
 	{
-		group_info = getgrgid(entry_data->stat_buf.st_gid);
-		if (group_info)
+		check_cached_group_name(args, entry_data);
+		if (args->id_cache.last_group_name)
 		{
-			ft_printf("%s ", group_info->gr_name);
-			print_blanks(widths->group_w - ft_strlen(group_info->gr_name));
+			ft_printf("%s ", args->id_cache.last_group_name);
+			print_blanks(widths->group_w - ft_strlen(args->id_cache.last_group_name));
 		}
 		else
 			ft_printf("%d ", entry_data->stat_buf.st_gid);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 13:09:18 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:10:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	main(int argc, char **argv)
 
 	(void)argc;
 	ft_bzero(&args, sizeof(t_args));
+	args.id_cache.last_uid = -1;
+	args.id_cache.last_gid = -1;
 	parse_arguments(argv, &args);
 	files_listing(&args);
 	dirs_listing(&args);

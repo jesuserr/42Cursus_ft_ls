@@ -6,11 +6,49 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/28 13:15:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:12:16 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+// Last user and group IDs are cached to avoid repeated calls to getpwuid()
+// and getgrgid(), which are very expensive operations. If the cached ID matches
+// the current entry's ID, the cached name is used; otherwise, a new query is
+// performed and the cache is updated.
+void	check_cached_user_name(t_args *args, t_entry_data *entry_data)
+{
+	struct passwd	*user_info;
+
+	if (args->id_cache.last_uid != entry_data->stat_buf.st_uid)
+	{
+		user_info = getpwuid(entry_data->stat_buf.st_uid);
+		args->id_cache.last_uid = entry_data->stat_buf.st_uid;
+		if (user_info)
+			args->id_cache.last_user_name = user_info->pw_name;
+		else
+			args->id_cache.last_user_name = NULL;
+	}
+}
+
+// Last user and group IDs are cached to avoid repeated calls to getpwuid()
+// and getgrgid(), which are very expensive operations. If the cached ID matches
+// the current entry's ID, the cached name is used; otherwise, a new query is
+// performed and the cache is updated.
+void	check_cached_group_name(t_args *args, t_entry_data *entry_data)
+{
+	struct group	*group_info;
+
+	if (args->id_cache.last_gid != entry_data->stat_buf.st_gid)
+	{
+		group_info = getgrgid(entry_data->stat_buf.st_gid);
+		args->id_cache.last_gid = entry_data->stat_buf.st_gid;
+		if (group_info)
+			args->id_cache.last_group_name = group_info->gr_name;
+		else
+			args->id_cache.last_group_name = NULL;
+	}
+}
 
 // Counts the number of digits in a 64-bit unsigned integer. Returns the count
 // as an 8-bit unsigned integer. Used to determine the width of the file size
@@ -47,8 +85,6 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 	t_widths		*field_widths;
 	t_entry_data	*entry_data;
 	t_list			*list;
-	struct passwd	*user_info;
-	struct group	*group_info;
 
 	field_widths = malloc(sizeof(t_widths));
 	ft_bzero(field_widths, sizeof(t_widths));
@@ -62,15 +98,17 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 			field_widths->largest_nlink = entry_data->stat_buf.st_nlink;
 		if (!args->hide_owner)
 		{
-			user_info = getpwuid(entry_data->stat_buf.st_uid);
-			if (user_info && (ft_strlen(user_info->pw_name) > field_widths->user_w))
-				field_widths->user_w = ft_strlen(user_info->pw_name);
+			check_cached_user_name(args, entry_data);
+			if (args->id_cache.last_user_name && \
+			ft_strlen(args->id_cache.last_user_name) > field_widths->user_w)
+				field_widths->user_w = ft_strlen(args->id_cache.last_user_name);
 		}
 		if (!args->hide_group)
 		{
-			group_info = getgrgid(entry_data->stat_buf.st_gid);
-			if (group_info && (ft_strlen(group_info->gr_name) > field_widths->group_w))
-				field_widths->group_w = ft_strlen(group_info->gr_name);
+			check_cached_group_name(args, entry_data);
+			if (args->id_cache.last_group_name && \
+			ft_strlen(args->id_cache.last_group_name) > field_widths->group_w)
+				field_widths->group_w = ft_strlen(args->id_cache.last_group_name);
 		}
 		list = list->next;
 	}

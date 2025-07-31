@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/30 16:28:44 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:41:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              HEADERS
 */
+
 # include "../libft/includes/libft.h"
 # include "../libft/includes/get_next_line.h"
 # include <dirent.h>				// for opendir, readdir, closedir
@@ -33,6 +34,7 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              DEFINES
 */
+
 # define SECONDS_IN_6_MONTHS	(6 * 30 * 24 * 60 * 60)  // 15,552,000 seconds
 # define CTIME_SIZE				26	// size of ctime string, including '\0'
 # define SKIP_DAY				4	// characters to skip day in ctime string
@@ -62,6 +64,20 @@ typedef int	(*t_compare_func)(const void *a, const void *b, bool reverse);
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              STRUCTS
 */
+
+// Cache structure to store user and group info to avoid repeated calls to
+// getpwuid() and getgrgid(), which are very expensive in terms of memory and
+// performance due to their access to complex system databases to retrieve
+// user and group names based on IDs. Performance is improved by caching the
+// last user and group IDs and their corresponding names.
+typedef struct s_id_cache
+{
+	uid_t	last_uid;			// last user ID cached
+	char	*last_user_name;	// last user name cached
+	gid_t	last_gid;			// last group ID cached
+	char	*last_group_name;	// last group name cached
+}	t_id_cache;
+
 typedef struct s_args
 {
 	bool		all;				// option -a
@@ -80,6 +96,7 @@ typedef struct s_args
 	t_list		*cli_dirs_list;		// linked list of directories to 'ls'
 	bool		first_printing;		// used to not print "\n" the first time
 	uint8_t		exit_status;		// exit status of the program
+	t_id_cache	id_cache;			// cache for user/group info
 }	t_args;
 
 typedef struct s_entry_data
@@ -102,6 +119,7 @@ typedef struct s_widths
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
+
 /********************************** list_routines.c ***************************/
 void		list_files(t_args *args, t_list *entries_list, t_widths *widths);
 void		list_dirs(t_args *args, const char *current_path);
@@ -136,6 +154,8 @@ void		print_long_format(t_args *args, t_list *entries_list, \
 			const char *current_path);
 
 /********************************** print_long_utils.c ************************/
+void		check_cached_user_name(t_args *args, t_entry_data *entry_data);
+void		check_cached_group_name(t_args *args, t_entry_data *entry_data);
 uint8_t		count_number_digits(uint64_t number);
 void		print_blanks(uint8_t spaces);
 t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list);
