@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 23:08:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/03 13:17:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,58 @@ static void	print_usage(void)
 		"  -S                      sort by file size, largest first\n"
 		"  -t                      sort by time, newest first\n"
 		"  -x                      list ACL and extended attributes\n"
-		"  -1                      list one file per line\n");
+		"  -1                      list one file per line\n\n"
+		"List information about the FILEs (the current directory by default).\n"
+		"Sort entries alphabetically if none of -t or -S is specified.\n\n"
+		"Exit status:\n"
+		"  0  if OK,\n"
+		"  1  if minor problems (e.g., cannot access subdirectory),\n"
+		"  2  if serious trouble (e.g., cannot access command-line argument).\n"
+		"\nGitHub repository: <https://github.com/jesuserr/42Cursus_ft_ls>\n");
 	ft_printf_flush();
 	exit(EXIT_SUCCESS);
 }
 
 // Uses lstat() to check if entity exists and determine its type. Directories
 // are added to cli_dirs_list, while regular files and symbolic links are added
-// to cli_files_list. If the entity doesn't exist, prints an error message and
-// continues, setting no_such_file flag to indicate failure. lstat() is used to
-// check if the file exists as the actual ls command does, which means it will
-// show broken symlinks in the listing.
+// to cli_files_list. If the entity doesn't exist or cannot be access, prints an
+// error message, sets no_such_file flag and exit_status to proper values to
+// indicate failure and continues. lstat() is used to check if the file exists
+// as the actual ls command does, which means it will show broken symlinks in
+// the listing.
 static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 {
 	struct stat	file_exists;
+	DIR			*dir;
 
 	if (lstat(entity, &file_exists) == 0)
 	{
 		if (S_ISDIR(file_exists.st_mode))
-			ft_lstadd_back(&args->cli_dirs_list, ft_lstnew(ft_strdup(entity)));
+		{
+			dir = opendir(entity);
+			if (!dir)
+			{
+				ft_putstr_fd("ft_ls: cannot open directory '", STDERR_FILENO);
+				ft_putstr_fd(entity, STDERR_FILENO);
+				ft_putstr_fd("': ", STDERR_FILENO);
+				perror("");
+				args->exit_status = EXIT_SERIOUS_ERROR;
+				*no_such_file = true;
+			}
+			else
+			{
+				ft_lstadd_back(&args->cli_dirs_list, ft_lstnew(ft_strdup(entity)));
+				closedir(dir);
+			}
+		}
 		else if (S_ISREG(file_exists.st_mode) || S_ISLNK(file_exists.st_mode))
 			ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(entity)));
 	}
 	else
 	{
-		ft_printf("ft_ls: cannot access '%s': ", entity);
-		ft_printf_flush();
+		ft_putstr_fd("ft_ls: cannot access '", STDERR_FILENO);
+		ft_putstr_fd(entity, STDERR_FILENO);
+		ft_putstr_fd("': ", STDERR_FILENO);
 		perror("");
 		args->exit_status = EXIT_SERIOUS_ERROR;
 		*no_such_file = true;
