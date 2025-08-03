@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/30 16:41:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/03 23:40:50 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ static const char	*get_entity_color(t_entry_data *entry_data)
 		return (COLOR_SETUID_FILE);
 	if (mode & S_ISGID)
 		return (COLOR_SETGID_FILE);
-	if (mode & S_IXUSR)
+	if (mode & S_IXUSR || mode & S_IXGRP || mode & S_IXOTH)
 		return (COLOR_EXECUTABLE);
 	if (S_ISBLK(mode) || S_ISCHR(mode))
-		return (COLOR_DEVICE);
+		return (COLOR_NAMED_PIPE);
 	return (COLOR_RESET);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/03 13:17:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/03 23:46:38 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,11 @@ static void	print_usage(void)
 }
 
 // Uses lstat() to check if entity exists and determine its type. Directories
-// are added to cli_dirs_list, while regular files and symbolic links are added
-// to cli_files_list. If the entity doesn't exist or cannot be access, prints an
-// error message, sets no_such_file flag and exit_status to proper values to
-// indicate failure and continues. lstat() is used to check if the file exists
-// as the actual ls command does, which means it will show broken symlinks in
-// the listing.
+// are added to cli_dirs_list, while anything else is added to cli_files_list.
+// If the entity doesn't exist or cannot be access, prints an error message, 
+// sets no_such_file flag and exit_status to proper values to indicate failure
+// and continues. lstat() is used to check if the file exists as the actual ls
+// command does, which means it will show broken symlinks in the listing.
 static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 {
 	struct stat	file_exists;
@@ -84,7 +83,7 @@ static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 				closedir(dir);
 			}
 		}
-		else if (S_ISREG(file_exists.st_mode) || S_ISLNK(file_exists.st_mode))
+		else
 			ft_lstadd_back(&args->cli_files_list, ft_lstnew(ft_strdup(entity)));
 	}
 	else
