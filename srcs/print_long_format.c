@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 23:31:56 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:36:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,13 @@ const char *current_path, t_widths *widths)
 		else
 			ft_printf("%d ", entry_data->stat_buf.st_gid);
 	}
-	print_blanks(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
-	ft_printf("%d ", entry_data->stat_buf.st_size);
+	if (!args->human_readable)
+	{
+		print_blanks(widths->size_w - count_number_digits(entry_data->stat_buf.st_size));
+		ft_printf("%d ", entry_data->stat_buf.st_size);
+	}
+	else
+		print_human_readable_size(entry_data->stat_buf.st_size);
 	formatted_time = get_formatted_time(&entry_data->stat_buf);
 	ft_printf("%s ", formatted_time);
 	print_file_name(args, entry_data, current_path);
@@ -160,7 +165,12 @@ void	print_long_format(t_args *args, t_list *entries_list, const char *current_p
 	t_entry_data	*entry_data;
 	t_widths		*widths;
 
-	ft_printf("total %d\n", calculate_total_blocks(entries_list));
+	ft_printf("total ");
+	if (!args->human_readable)
+		ft_printf("%d", calculate_total_blocks(entries_list));
+	else
+		print_human_readable_size(calculate_total_blocks(entries_list) * 1024);
+	ft_printf("\n");
 	widths = calculate_fields_widths(args, entries_list);
 	while (entries_list)
 	{

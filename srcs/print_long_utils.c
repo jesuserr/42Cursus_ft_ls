@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 12:12:16 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:39:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 	while (list)
 	{
 		entry_data = (t_entry_data *)list->content;
-		if (entry_data->stat_buf.st_size > field_widths->largest_size)
+		if (entry_data->stat_buf.st_size > field_widths->largest_size && \
+		!args->human_readable)
 			field_widths->largest_size = entry_data->stat_buf.st_size;
 		if (entry_data->stat_buf.st_nlink > field_widths->largest_nlink)
 			field_widths->largest_nlink = entry_data->stat_buf.st_nlink;
@@ -115,4 +116,58 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 	field_widths->size_w = count_number_digits(field_widths->largest_size);
 	field_widths->nlink_w = count_number_digits(field_widths->largest_nlink);
 	return (field_widths);
+}
+
+// Converts file size to human-readable format using binary units (1024-based).
+// For sizes under 1024 bytes, prints exact value. For larger sizes, converts
+// to appropriate unit (K, M, G, T, P, E, Z, Y) with decimal precision for
+// single-digit values and rounding for others. Handles spacing alignment for
+// consistent column formatting in long listing output.
+// Mimics the behavior of the 'ls' command with the -h option. Not very happy
+// with the function structure, but it works as expected taking into account the
+// ft_printf() limitations (no float support, no columns support, etc.).
+void	print_human_readable_size(uint64_t size)
+{
+	char	*units[] = {"", "K", "M", "G", "T", "P", "E", "Z", "Y"};
+	uint8_t	index;
+	float	decimal_part;
+
+	if (size < 1024)
+	{
+		print_blanks(5 - count_number_digits(size));
+		ft_printf("%d ", size);
+		return ;
+	}
+	index = 0;
+	decimal_part = 0.0;
+	while (size >= 1024)
+	{
+		decimal_part = (size % 1024) / 1024.0;
+		size = size / 1024;
+		index++;
+	}
+	if (size <= 9 && decimal_part > 0 && decimal_part < 0.9)
+	{
+		if (decimal_part != 0.5)
+			ft_printf(" %d.%d%s ", size, (int)(decimal_part * 10) + 1, units[index]);
+		else
+			ft_printf(" %d.%d%s ", size, (int)(decimal_part * 10), units[index]);
+	}
+	else if (size <= 9 && decimal_part <= 0)
+		ft_printf(" %d.0%s ", size, units[index]);
+	else if (size <= 9 && decimal_part >= 0.9)
+	{
+		size++;
+		if (size <= 9)
+			ft_printf(" %d.0%s ", size, units[index]);
+		else
+			ft_printf("  %d%s ", size, units[index]);
+	}
+	else
+	{
+		if (decimal_part != 0)
+			size++;
+		print_blanks(4 - count_number_digits(size));
+		ft_printf("%d%s ", size, units[index]);
+	}
 }

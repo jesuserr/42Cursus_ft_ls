@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/09 21:57:27 by jesuserr          #+#    #+#              #
-#    Updated: 2025/07/28 10:57:27 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/08/12 20:09:12 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ DEPS = $(addprefix $(PATH_DEPS), $(SRCS:.c=.d))
 
 INCLUDE = -I./ -I./libft/includes/
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pedantic -Wshadow #-fsanitize=address -g
 
 NORM = $(addprefix $(PATH_SRCS), $(SRCS)) srcs/ft_ls.h
 GREEN = "\033[0;92m"

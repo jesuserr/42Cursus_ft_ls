@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/07/31 23:41:24 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:39:12 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_args
 	bool		all;				// option -a
 	bool		almost_all;			// option -A (bonus)
 	bool		hide_owner;			// option -g (bonus)
+	bool		human_readable;		// option -h (bonus)
 	bool		long_listing;		// option -l
 	bool		quoting;			// option -N (bonus - as 'ls' but reversed)
 	bool		hide_group;			// option -o (bonus)
@@ -161,6 +162,7 @@ void		check_cached_group_name(t_args *args, t_entry_data *entry_data);
 uint8_t		count_number_digits(uint64_t number);
 void		print_blanks(uint8_t spaces);
 t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list);
+void		print_human_readable_size(uint64_t size);
 
 /********************************** print_printf.c ***************************/
 void		ft_printf(char const *hold, ...);
