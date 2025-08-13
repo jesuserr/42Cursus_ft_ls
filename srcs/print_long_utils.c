@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/12 21:39:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/13 13:46:37 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 // Mimics the behavior of the 'ls' command with the -h option. Not very happy
 // with the function structure, but it works as expected taking into account the
 // ft_printf() limitations (no float support, no columns support, etc.).
-void	print_human_readable_size(uint64_t size)
+void	print_human_readable_size(t_args *args, uint64_t size)
 {
 	char	*units[] = {"", "K", "M", "G", "T", "P", "E", "Z", "Y"};
 	uint8_t	index;
@@ -135,7 +135,7 @@ void	print_human_readable_size(uint64_t size)
 	if (size < 1024)
 	{
 		print_blanks(5 - count_number_digits(size));
-		ft_printf("%d ", size);
+		ft_printf("%d%s", size, args->separator);
 		return ;
 	}
 	index = 0;
@@ -149,25 +149,26 @@ void	print_human_readable_size(uint64_t size)
 	if (size <= 9 && decimal_part > 0 && decimal_part < 0.9)
 	{
 		if (decimal_part != 0.5)
-			ft_printf(" %d.%d%s ", size, (int)(decimal_part * 10) + 1, units[index]);
+			ft_printf(" %d.%d", size, (int)(decimal_part * 10) + 1);
 		else
-			ft_printf(" %d.%d%s ", size, (int)(decimal_part * 10), units[index]);
+			ft_printf(" %d.%d", size, (int)(decimal_part * 10));
 	}
 	else if (size <= 9 && decimal_part <= 0)
-		ft_printf(" %d.0%s ", size, units[index]);
+		ft_printf(" %d.0", size);
 	else if (size <= 9 && decimal_part >= 0.9)
 	{
 		size++;
 		if (size <= 9)
-			ft_printf(" %d.0%s ", size, units[index]);
+			ft_printf(" %d.0", size);
 		else
-			ft_printf("  %d%s ", size, units[index]);
+			ft_printf("  %d", size);
 	}
 	else
 	{
 		if (decimal_part != 0)
 			size++;
 		print_blanks(4 - count_number_digits(size));
-		ft_printf("%d%s ", size, units[index]);
+		ft_printf("%d", size);
 	}
+	ft_printf("%s%s", units[index], args->separator);
 }

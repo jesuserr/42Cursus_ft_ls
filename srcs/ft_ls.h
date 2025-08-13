@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/12 20:39:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:59:39 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_args
 	bool		recursive;			// option -R
 	bool		sort_by_size;		// option -S (bonus)
 	bool		sort_by_time;		// option -t
+	bool		tab_separated;		// option -T (bonus - non-canonical option)
 	bool		acl_and_xattr;		// option -x (bonus - non-canonical option)
 	bool		one_file_per_line;	// option -1 (bonus)
 	t_list		*cli_files_list;	// linked list of files to 'ls'
@@ -100,6 +101,7 @@ typedef struct s_args
 	bool		first_printing;		// used to not print "\n" the first time
 	uint8_t		exit_status;		// exit status of the program
 	t_id_cache	id_cache;			// cache for user/group info
+	char		separator[3];		// separator for tab-separated output
 }	t_args;
 
 typedef struct s_entry_data
@@ -162,7 +164,7 @@ void		check_cached_group_name(t_args *args, t_entry_data *entry_data);
 uint8_t		count_number_digits(uint64_t number);
 void		print_blanks(uint8_t spaces);
 t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list);
-void		print_human_readable_size(uint64_t size);
+void		print_human_readable_size(t_args *args, uint64_t size);
 
 /********************************** print_printf.c ***************************/
 void		ft_printf(char const *hold, ...);

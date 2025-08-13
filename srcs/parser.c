@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/11 23:26:22 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/13 14:09:49 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	print_usage(void)
 		"  -R                      list subdirectories recursively\n"
 		"  -S                      sort by file size, largest first\n"
 		"  -t                      sort by time, newest first\n"
+		"  -T                      with -l, use tab as column separator\n"
 		"  -x                      list ACL and extended attributes\n"
 		"  -1                      list one file per line\n\n"
 		"List information about the FILEs (the current directory by default).\n"
@@ -119,11 +120,16 @@ static void	sort_cli_lists(t_args *args)
 // All arguments that are not options (starting with '-') are verified to
 // exist as files or directories. At the end, lists are sorted depending on
 // the options set by the user.
+// args->separator[0] will always consist of a single space character as default
+// column separator in long listings. If -T is set, args->separator[1] will be
+// set to '\t' to add a tab for column separation in long listings. In any case
+// args->separator, as a string, is always null-terminated.
 void	parse_arguments(char **argv, t_args *args)
 {
 	bool		no_such_file;
 
 	no_such_file = false;
+	args->separator[0] = ' ';
 	for (uint8_t i = 1; argv[i]; i++)
 		if (!ft_strncmp(argv[i], "--help", 6) && ft_strlen(argv[i]) == 6)
 			print_usage();
@@ -168,6 +174,11 @@ void	parse_arguments(char **argv, t_args *args)
 				{
 					args->sort_by_time = true;
 					args->sort_by_size = false;
+				}
+				else if (argv[i][j] == 'T')
+				{
+					args->tab_separated = true;
+					args->separator[1] = '\t';
 				}
 				else if (argv[i][j] == 'x')
 					args->acl_and_xattr = true;
