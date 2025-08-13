@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/03 23:40:50 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:19:55 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,9 @@ const char *current_path)
 	const char	*color;
 
 	file_name = entry_data->entry.d_name;
-	color = get_entity_color(entry_data);
+	color = COLOR_RESET;
+	if (!args->no_colors)
+		color = get_entity_color(entry_data);
 	if (args->quoting && ft_strchr(file_name, ' ') != NULL)
 		ft_printf("%s'%s'%s", color, file_name, COLOR_RESET);
 	else

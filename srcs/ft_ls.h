@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/12 22:59:39 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:17:33 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_args
 {
 	bool		all;				// option -a
 	bool		almost_all;			// option -A (bonus)
+	bool		no_colors;			// option -c (bonus - non-canonical option)
 	bool		hide_owner;			// option -g (bonus)
 	bool		human_readable;		// option -h (bonus)
 	bool		long_listing;		// option -l
