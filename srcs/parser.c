@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/13 17:18:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:17:46 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	print_usage(void)
 		"  -S                      sort by file size, largest first\n"
 		"  -t                      sort by time, newest first\n"
 		"  -T                      with -l, use tab as column separator\n"
+		"  -U                      do not sort directory entries\n"
 		"  -x                      list ACL and extended attributes\n"
 		"  -1                      list one file per line\n\n"
 		"List information about the FILEs (the current directory by default).\n"
@@ -102,6 +103,8 @@ static void	add_entity_to_list(char *entity, t_args *args, bool *no_such_file)
 
 static void	sort_cli_lists(t_args *args)
 {
+	if (args->no_sort)
+		return ;
 	if (args->cli_files_list && args->sort_by_time)
 		sort_list(&args->cli_files_list, compare_times_cli, args->reverse);
 	else if (args->cli_files_list && args->sort_by_size)
@@ -172,16 +175,24 @@ void	parse_arguments(char **argv, t_args *args)
 				{
 					args->sort_by_size = true;
 					args->sort_by_time = false;
+					args->no_sort = false;
 				}
 				else if (argv[i][j] == 't')
 				{
 					args->sort_by_time = true;
 					args->sort_by_size = false;
+					args->no_sort = false;
 				}
 				else if (argv[i][j] == 'T')
 				{
 					args->tab_separated = true;
 					args->separator[1] = '\t';
+				}
+				else if (argv[i][j] == 'U')
+				{
+					args->no_sort = true;
+					args->sort_by_size = false;
+					args->sort_by_time = false;
 				}
 				else if (argv[i][j] == 'x')
 					args->acl_and_xattr = true;

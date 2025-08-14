@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:20:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/03 11:20:18 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:07:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static bool	skip_entry(t_args *args, struct dirent *entry)
 // in place.
 static void	apply_sort_algorithm(t_args *args, t_list **entries_list)
 {
+	if (args->no_sort)
+		return ;
 	if (args->sort_by_time)
 		sort_list(entries_list, compare_stat_times, args->reverse);
 	else if (args->sort_by_size)

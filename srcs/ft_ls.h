@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/13 17:17:33 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:04:54 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_args
 	bool		sort_by_size;		// option -S (bonus)
 	bool		sort_by_time;		// option -t
 	bool		tab_separated;		// option -T (bonus - non-canonical option)
+	bool		no_sort;			// option -U (bonus)
 	bool		acl_and_xattr;		// option -x (bonus - non-canonical option)
 	bool		one_file_per_line;	// option -1 (bonus)
 	t_list		*cli_files_list;	// linked list of files to 'ls'
