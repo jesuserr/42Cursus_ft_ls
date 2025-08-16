@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:58:48 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/14 16:04:54 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:01:13 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_args
 	bool		no_colors;			// option -c (bonus - non-canonical option)
 	bool		hide_owner;			// option -g (bonus)
 	bool		human_readable;		// option -h (bonus)
+	bool		inode;				// option -i (bonus - only works with -l)
 	bool		long_listing;		// option -l
 	bool		quoting;			// option -N (bonus - as 'ls' but reversed)
 	bool		hide_group;			// option -o (bonus)
@@ -118,8 +119,10 @@ typedef struct s_widths
 	uint8_t		nlink_w;			// max width for number of links field
 	uint8_t		user_w;				// max width for user name field
 	uint8_t		group_w;			// max width for group name field
+	uint8_t		inode_w;			// max width for inode number field
 	int64_t		largest_size;		// largest file size in the list
 	uint64_t	largest_nlink;		// largest number of hard links in the list
+	uint64_t	largest_inode;		// largest inode number in the list
 }	t_widths;
 
 /*

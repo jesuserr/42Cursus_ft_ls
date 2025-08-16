@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/13 13:58:53 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/16 13:30:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,12 @@ const char *current_path, t_widths *widths)
 	char	*formatted_time;
 	char	*full_path;
 
+	if (args->inode)
+	{
+		print_blanks(widths->inode_w - count_number_digits(entry_data->stat_buf.st_ino));
+		ft_printf("%d", entry_data->stat_buf.st_ino);
+		ft_printf("%s", args->separator);
+	}
 	print_file_permissions(entry_data->stat_buf.st_mode);
 	if (args->acl_and_xattr)
 	{

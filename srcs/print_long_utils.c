@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:38:38 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/13 13:46:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:04:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void	print_blanks(uint8_t spaces)
 }
 
 // Analyzes the whole list of entries, to determine the maximum widths for each
-// one of the following fields (file size, number of links, user name and group
-// name). Returns a pointer to an allocated t_widths structure containing the
-// maximum width for each field.
+// one of the following fields (file size, number of links, user name, group
+// name and inode number). Returns a pointer to an allocated t_widths structure
+// containing the maximum width for each field.
 t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 {
 	t_widths		*field_widths;
@@ -92,6 +92,9 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 	while (list)
 	{
 		entry_data = (t_entry_data *)list->content;
+		if (entry_data->stat_buf.st_ino > field_widths->largest_inode && \
+		args->inode)
+			field_widths->largest_inode = entry_data->stat_buf.st_ino;
 		if (entry_data->stat_buf.st_size > field_widths->largest_size && \
 		!args->human_readable)
 			field_widths->largest_size = entry_data->stat_buf.st_size;
@@ -113,6 +116,7 @@ t_widths	*calculate_fields_widths(t_args *args, t_list *entries_list)
 		}
 		list = list->next;
 	}
+	field_widths->inode_w = count_number_digits(field_widths->largest_inode);
 	field_widths->size_w = count_number_digits(field_widths->largest_size);
 	field_widths->nlink_w = count_number_digits(field_widths->largest_nlink);
 	return (field_widths);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 22:07:45 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/14 16:17:46 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/16 13:14:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	print_usage(void)
 		"  -c                      do not color the output\n"
 		"  -g                      like -l, but do not list owner\n"
 		"  -h                      with -l, print sizes in human readable format\n"
+		"  -i                      with -l, print index number of the file\n"
 		"  -l                      use a long listing format\n"
 		"  -N                      print entry names with quoting\n"
 		"  -o                      like -l, but do not list group information\n"
@@ -159,6 +160,8 @@ void	parse_arguments(char **argv, t_args *args)
 					args->hide_owner = true;
 				else if (argv[i][j] == 'h')
 					args->human_readable = true;
+				else if (argv[i][j] == 'i')
+					args->inode = true;
 				else if (argv[i][j] == 'l')
 					args->long_listing = true;
 				else if (argv[i][j] == 'N')
