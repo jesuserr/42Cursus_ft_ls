@@ -65,6 +65,7 @@ sudo apt-get install build-essential acl attr
 ```bash
 git clone https://github.com/jesuserr/42Cursus_ft_ls.git
 cd 42Cursus_ft_ls
+git submodule update --init --recursive
 make
 ```
 
