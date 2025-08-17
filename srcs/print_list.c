@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 21:24:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/08/13 17:19:55 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/08/17 13:03:21 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,20 @@ const char *current_path)
 	char		*full_path;
 	char		buffer[PATH_MAX];
 	int64_t		read_bytes;
-	const char	*color;
+	const char	*set_color, *reset_color;
 
 	file_name = entry_data->entry.d_name;
-	color = COLOR_RESET;
+	set_color = "\0";
+	reset_color = "\0";
 	if (!args->no_colors)
-		color = get_entity_color(entry_data);
+	{
+		set_color = get_entity_color(entry_data);
+		reset_color = COLOR_RESET;
+	}
 	if (args->quoting && ft_strchr(file_name, ' ') != NULL)
-		ft_printf("%s'%s'%s", color, file_name, COLOR_RESET);
+		ft_printf("%s'%s'%s", set_color, file_name, reset_color);
 	else
-		ft_printf("%s%s%s", color, file_name, COLOR_RESET);
+		ft_printf("%s%s%s", set_color, file_name, reset_color);
 	if (S_ISLNK(entry_data->stat_buf.st_mode) && args->long_listing)
 	{
 		ft_printf(" -> ");
